@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace WSC_AI
 {
-    public partial class Form1 : Form
+    public partial class Main_Form : Form
     {
-        public Form1()
+        public Main_Form()
         {
             InitializeComponent();
+        }
+
+        private void button_basler_Click(object sender, EventArgs e)
+        {
+            LogWriter log = new LogWriter("button clik");
         }
     }
 }
