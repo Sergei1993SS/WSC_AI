@@ -15,13 +15,6 @@ namespace WSC_AI
         public UInt16 MaxBufferSize = 10; 
     }
 
-    struct GrabImages
-    {
-        public byte[] buffer;
-        public long time;
-        public ushort Width;
-        public ushort Height;
 
-    }
     
 }
