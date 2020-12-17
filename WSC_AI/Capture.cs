@@ -6,12 +6,12 @@ using OpenCvSharp;
 
 namespace WSC_AI
 {
-    class Capture
+    class Capture : Globals
     {
         public Camera Basler_camera;
         public bool IsFind = false;
         public bool IsSetConfig = false;
-        public Globals GlobalVar = new Globals();
+        //public Globals GlobalVar = new Globals();
 
 
         public Capture()
@@ -55,8 +55,8 @@ namespace WSC_AI
                 try
                 {
                     this.Basler_camera.Open();
-                    this.Basler_camera.Parameters.Load(GlobalVar.CamConfigPath, ParameterPath.CameraDevice);
-                    LogWriter log = new LogWriter("Загружен конфиг: " + GlobalVar.CamConfigPath);
+                    this.Basler_camera.Parameters.Load(CamConfigPath, ParameterPath.CameraDevice);
+                    LogWriter log = new LogWriter("Загружен конфиг: " + CamConfigPath);
                     this.IsSetConfig = true;
 
                     // Enable the chunk mode.
@@ -68,7 +68,7 @@ namespace WSC_AI
                     // Enable time stamp chunks.
                     this.Basler_camera.Parameters[PLCamera.ChunkSelector].SetValue(PLCamera.ChunkSelector.Timestamp);
                     this.Basler_camera.Parameters[PLCamera.ChunkEnable].SetValue(true);
-                    this.Basler_camera.Parameters[PLCameraInstance.MaxNumBuffer].SetValue(this.GlobalVar.MaxBufferSize);
+                    this.Basler_camera.Parameters[PLCameraInstance.MaxNumBuffer].SetValue(MaxBufferSize);
 
                     // Enable CRC checksum chunks.
                     this.Basler_camera.Parameters[PLCamera.ChunkSelector].SetValue(PLCamera.ChunkSelector.PayloadCRC16);

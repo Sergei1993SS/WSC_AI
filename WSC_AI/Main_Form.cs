@@ -49,6 +49,7 @@ namespace WSC_AI
 
                     System.Threading.Thread.Sleep(500);
                     GC.Collect();
+                    pictureBox_cam.Refresh();
 
                 }
                 //cap.Basler_camera.StreamGrabber.Stop();

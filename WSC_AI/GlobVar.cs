@@ -13,6 +13,8 @@ namespace WSC_AI
 
         //Максимальное количество снимков в буфере
         public UInt16 MaxBufferSize = 10; 
+
+        public String Server_Name= "opc.tcp://127.0.0.1:4334";
     }
 
 
