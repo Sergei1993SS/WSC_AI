@@ -3,6 +3,10 @@ using System.Windows.Forms;
 using Basler.Pylon;
 using System.Collections.Generic;
 using OpenCvSharp;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Drawing;
 
 
 namespace WSC_AI
@@ -10,17 +14,18 @@ namespace WSC_AI
     public partial class Main_Form : Form
     {
         Capture cap;
+        OPC OPC_client;
+        ConcurrentQueue<TScan_and_Images> Images;
+        PixelDataConverter converter;
 
         public Main_Form()
         {
             InitializeComponent();
             cap = new Capture();
-        }
-
-        private void button_basler_Click(object sender, EventArgs e)
-        {
-            
             cap.SetConfig();
+            OPC_client = new OPC();
+            Images = new ConcurrentQueue<TScan_and_Images>();
+            converter = new PixelDataConverter();
 
             if (cap.IsFind && cap.IsSetConfig)
             {
@@ -35,35 +40,108 @@ namespace WSC_AI
                 label_sn_cam.Refresh();
 
                 
-                List<IGrabResult> list_grab = new List<IGrabResult>();
-                //cap.Basler_camera.StreamGrabber.Start();
-
-                for (int i = 0; i < 50; i++)
-                {
-                    
-                    
-                    //cap.CameraSnapshot();
-                    list_grab.Add(cap.CameraSnapshot());                   
-                    
-                   
-
-                    System.Threading.Thread.Sleep(500);
-                    GC.Collect();
-                    pictureBox_cam.Refresh();
-
-                }
-                //cap.Basler_camera.StreamGrabber.Stop();
-                cap.Basler_camera.Close();
-                cap.Basler_camera.Dispose();
-
             }
             else
             {
                 pictureBox_cam.BackgroundImage = WSC_AI.Properties.Resources.cross;
                 pictureBox_cam.Refresh();
             }
+        }
+
+        public delegate void InvokeDelegate(System.Drawing.Bitmap img);
+
+        public void InvokeMethod(System.Drawing.Bitmap img)
+        {
+            pictureBox_main.BackgroundImage = img;
+            pictureBox_main.Refresh();
+        }
+
+        private void button_basler_Click(object sender, EventArgs e)
+        {
+
+            Task.Run(() => CameraProcess());
+            Task.Run(() => ImageProcess());
+
+            
+
+
+            int p = 0;
+                
+
+            
+            
 
          
+            
+        }
+
+
+
+        /// <summary>
+        /// Процесс съемки
+        /// </summary>
+        private void CameraProcess()
+        {
+            while (true)
+            {
+                if (OPC_client.GetnisCameraInPosition())
+                {
+
+                    Images.Enqueue(new TScan_and_Images(cap.CameraSnapshot(), OPC_client.GetX(), OPC_client.GetY(), OPC_client.GetZ(),
+                                                    OPC_client.GetRx(), OPC_client.GetRy(), OPC_client.GetRz()));
+                    OPC_client.SetnisCameraInPositionFalse();
+                    OPC_client.SetisCameraShotComplete();
+                    GC.Collect();
+                    
+
+
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
+
+            }
+
+            // See documentation for this method.
+            // Images.CompleteAdding();
+        }
+
+        private void ImageProcess()
+        {
+            
+            while (true)
+            {
+
+                try
+                {
+                    if (!Images.IsEmpty)
+                    {
+                        TScan_and_Images sample;
+                        Images.TryDequeue(out sample);
+                        Bitmap bitmap = new Bitmap(sample.GrabImage.Width, sample.GrabImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                        System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bitmap.PixelFormat);
+                        converter.OutputPixelFormat = PixelType.BGRA8packed;
+                        IntPtr ptrBmp = bmpData.Scan0;
+                        converter.Convert(ptrBmp, bmpData.Stride * bitmap.Height, sample.GrabImage);
+                        bitmap.UnlockBits(bmpData);
+                        BeginInvoke(new InvokeDelegate(InvokeMethod), bitmap);
+                        GC.Collect();
+
+
+                    }
+                    else
+                    {
+                        Thread.Sleep(1000);
+                    }
+                   
+                }
+                catch (InvalidOperationException) { }
+
+                
+                
+            }
+
             
         }
 
@@ -77,7 +155,10 @@ namespace WSC_AI
             if (cap.Basler_camera.IsOpen)
             {
                 cap.Basler_camera.Close();
+                cap.Basler_camera.Dispose();
             }
         }
+
+        
     }
 }

@@ -47,6 +47,10 @@
             // 
             // pictureBox_main
             // 
+            this.pictureBox_main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox_main.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox_main.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.pictureBox_main.Location = new System.Drawing.Point(13, 13);
             this.pictureBox_main.Name = "pictureBox_main";
@@ -56,6 +60,7 @@
             // 
             // button_basler
             // 
+            this.button_basler.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button_basler.Location = new System.Drawing.Point(971, 533);
             this.button_basler.Name = "button_basler";
             this.button_basler.Size = new System.Drawing.Size(207, 119);
@@ -76,6 +81,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.pictureBox_cam);
             this.groupBox1.Controls.Add(this.label_api_cam);
             this.groupBox1.Controls.Add(this.label_sn_cam);

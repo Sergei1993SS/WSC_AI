@@ -104,53 +104,63 @@ namespace WSC_AI
         {
 
         Grab:
-            // Wait for an image and then retrieve it. A timeout of 5000 ms is used.
-            IGrabResult grabResult = this.Basler_camera.StreamGrabber.GrabOne(5000, TimeoutHandling.ThrowException);
-            using (grabResult)
+            try
             {
-                // Image grabbed successfully?
-                if (grabResult.GrabSucceeded)
+                // Wait for an image and then retrieve it. A timeout of 5000 ms is used.
+                IGrabResult grabResult = this.Basler_camera.StreamGrabber.GrabOne(5000, TimeoutHandling.ThrowException);
+                using (grabResult)
                 {
-                    // Check to see if a buffer containing chunk data has been received.
-                    if (PayloadType.ChunkData != grabResult.PayloadTypeValue)
+                    // Image grabbed successfully?
+                    if (grabResult.GrabSucceeded)
                     {
-                        LogWriter log = new LogWriter("Буфер, содержащий метаданные не был получен");
+                        // Check to see if a buffer containing chunk data has been received.
+                        if (PayloadType.ChunkData != grabResult.PayloadTypeValue)
+                        {
+                            LogWriter log = new LogWriter("Буфер, содержащий метаданные не был получен");
+                            goto Grab;
+                        }
+
+                        // Because we have enabled the CRC Checksum feature, we can check
+                        // the integrity of the buffer.
+                        // Note: Enabling the CRC Checksum feature is not a prerequisite for using chunks.
+                        // Chunks can also be handled when the CRC Checksum feature is disabled.
+                        if (grabResult.HasCRC && grabResult.CheckCRC() == false)
+                        {
+                            LogWriter log = new LogWriter("Нарушена целостность передаваемых данных");
+                            goto Grab;
+                        }
+
+                        // Access the chunk data attached to the result.
+                        // Before accessing the chunk data, you should check to see
+                        // if the chunk is readable. If it is readable, the buffer
+                        // contains the requested chunk data.
+                        if (!grabResult.ChunkData[PLChunkData.ChunkTimestamp].IsReadable)
+                        {
+                            LogWriter log = new LogWriter("Время съемки кадра невозможно прочитать");
+                            goto Grab;
+                        }
+
+
+                    }
+                    else
+                    {
+                        LogWriter log = new LogWriter("Неудачная попытка захвата кадра");
                         goto Grab;
                     }
 
-                    // Because we have enabled the CRC Checksum feature, we can check
-                    // the integrity of the buffer.
-                    // Note: Enabling the CRC Checksum feature is not a prerequisite for using chunks.
-                    // Chunks can also be handled when the CRC Checksum feature is disabled.
-                    if (grabResult.HasCRC && grabResult.CheckCRC() == false)
-                    {
-                        LogWriter log = new LogWriter("Нарушена целостность передаваемых данных");
-                        goto Grab;
-                    }
+                    //IGrabResult res = grabResult.Clone();
+                    //grabResult.Dispose();
 
-                    // Access the chunk data attached to the result.
-                    // Before accessing the chunk data, you should check to see
-                    // if the chunk is readable. If it is readable, the buffer
-                    // contains the requested chunk data.
-                    if (!grabResult.ChunkData[PLChunkData.ChunkTimestamp].IsReadable)
-                    {
-                        LogWriter log = new LogWriter("Время съемки кадра невозможно прочитать");
-                        goto Grab;
-                    }
-
-
+                    return grabResult.Clone();
                 }
-                else
-                {
-                    LogWriter log = new LogWriter("Неудачная попытка захвата кадра");
-                    goto Grab;
-                }
-
-                //IGrabResult res = grabResult.Clone();
-                //grabResult.Dispose();
-                
-                return grabResult.Clone();
             }
+            catch (Exception)
+            {
+
+                LogWriter log = new LogWriter("Получено исключение при попытке захвата кадра");
+                goto Grab;
+            }
+            
 
         }
 

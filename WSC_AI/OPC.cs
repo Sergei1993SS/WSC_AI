@@ -37,125 +37,230 @@ namespace WSC_AI
         public bool GetnisCameraInPosition()
         {
             get_node:
-            Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.isCameraInPosition");
-            if (value.Status.IsGood)
+
+            try
             {
-                return (bool)value.Value;
+                Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.isCameraInPosition");
+                if (value.Status.IsGood)
+                {
+                    return (bool)value.Value;
+                }
+                else
+                {
+                    LogWriter log = new LogWriter("Ошибка получения isCameraInPosition");
+                    goto get_node;
+
+                }
             }
-            else
+            catch (Exception)
             {
+
                 LogWriter log = new LogWriter("Ошибка получения isCameraInPosition");
                 goto get_node;
-                
             }
+            
+        }
+
+        public void SetnisCameraInPositionFalse()
+        {
+        set_node:
+
+            try
+            {
+                Opc.UaFx.OpcStatus status = Client.WriteNode("ns=1;s=MainChannel.MetrologPC.isCameraInPosition", false);
+                if (!status.IsGood)
+                {
+                    LogWriter log = new LogWriter("Ошибка записи isCameraInPosition");
+                    goto set_node;
+                }
+            }
+            catch (Exception)
+            {
+
+                LogWriter log = new LogWriter("Ошибка записи isCameraInPosition");
+                goto set_node;
+            }
+            
+
         }
 
         public void SetisCameraShotComplete()
         {
 
             set_node:
-            Opc.UaFx.OpcStatus status = Client.WriteNode("ns=1;s=MainChannel.MetrologPC.isCameraShotComplete", 1);
-            if (!status.IsGood)
+            try
             {
+                Opc.UaFx.OpcStatus status = Client.WriteNode("ns=1;s=MainChannel.MetrologPC.isCameraShotComplete", true);
+                if (!status.IsGood)
+                {
+                    LogWriter log = new LogWriter("Ошибка записи isCameraShotComplete");
+                    goto set_node;
+                }
+            }
+            catch (Exception)
+            {
+
                 LogWriter log = new LogWriter("Ошибка записи isCameraShotComplete");
                 goto set_node;
             }
+            
         }
 
-        public float GetX()
+        public double GetX()
         {
         get_node:
-            Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolX");
-            if (value.Status.IsGood)
+
+            try
             {
-                return (float)value.Value;
+                Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolX");
+                if (value.Status.IsGood)
+                {
+                    return (double)value.Value;
+                }
+                else
+                {
+                    LogWriter log = new LogWriter("Ошибка получения ToolX");
+                    goto get_node;
+
+                }
             }
-            else
+            catch (Exception)
             {
+
                 LogWriter log = new LogWriter("Ошибка получения ToolX");
                 goto get_node;
-
             }
+            
         }
 
-        public float GetY()
+        public double GetY()
         {
         get_node:
-            Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolY");
-            if (value.Status.IsGood)
+            try
             {
-                return (float)value.Value;
+                Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolY");
+                if (value.Status.IsGood)
+                {
+                    return (double)value.Value;
+                }
+                else
+                {
+                    LogWriter log = new LogWriter("Ошибка получения ToolY");
+                    goto get_node;
+
+                }
             }
-            else
+            catch (Exception)
             {
+
                 LogWriter log = new LogWriter("Ошибка получения ToolY");
                 goto get_node;
-
             }
+            
         }
 
-        public float GetZ()
+        public double GetZ()
         {
         get_node:
-            Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolZ");
-            if (value.Status.IsGood)
+            try
             {
-                return (float)value.Value;
+                Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolZ");
+                if (value.Status.IsGood)
+                {
+                    return (double)value.Value;
+                }
+                else
+                {
+                    LogWriter log = new LogWriter("Ошибка получения ToolZ");
+                    goto get_node;
+
+                }
             }
-            else
+            catch (Exception)
             {
+
                 LogWriter log = new LogWriter("Ошибка получения ToolZ");
                 goto get_node;
-
             }
+            
         }
 
-        public float GetRx()
+        public double GetRx()
         {
         get_node:
-            Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolW");
-            if (value.Status.IsGood)
+            try
             {
-                return (float)value.Value;
+                Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolW");
+                if (value.Status.IsGood)
+                {
+                    return (double)value.Value;
+                }
+                else
+                {
+                    LogWriter log = new LogWriter("Ошибка получения ToolW");
+                    goto get_node;
+
+                }
             }
-            else
+            catch (Exception)
             {
+
                 LogWriter log = new LogWriter("Ошибка получения ToolW");
                 goto get_node;
-
             }
+            
         }
 
-        public float GetRy()
+        public double GetRy()
         {
         get_node:
-            Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolR");
-            if (value.Status.IsGood)
+            try
             {
-                return (float)value.Value;
+                Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolR");
+                if (value.Status.IsGood)
+                {
+                    return (double)value.Value;
+                }
+                else
+                {
+                    LogWriter log = new LogWriter("Ошибка получения ToolR");
+                    goto get_node;
+
+                }
             }
-            else
+            catch (Exception)
             {
+
                 LogWriter log = new LogWriter("Ошибка получения ToolR");
                 goto get_node;
-
             }
+            
         }
 
-        public float GetRz()
+        public double GetRz()
         {
         get_node:
-            Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolP");
-            if (value.Status.IsGood)
+            try
             {
-                return (float)value.Value;
-            }
-            else
-            {
-                LogWriter log = new LogWriter("Ошибка получения ToolP");
-                goto get_node;
+                Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolP");
+                if (value.Status.IsGood)
+                {
+                    return (double)value.Value;
+                }
+                else
+                {
+                    LogWriter log = new LogWriter("Ошибка получения ToolP");
+                    goto get_node;
 
+                }
             }
+            catch (Exception)
+            {
+
+                LogWriter log = new LogWriter("Ошибка получения ToolP");
+                goto get_node;  
+            }
+            
         }
 
 
