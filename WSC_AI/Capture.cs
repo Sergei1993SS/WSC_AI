@@ -43,6 +43,7 @@ namespace WSC_AI
                 
                 }
             
+            
         }
 
         /// <summary>
@@ -79,6 +80,8 @@ namespace WSC_AI
             }
                 catch (Exception)
                 {
+                   try
+                    {   
                     LogWriter log = new LogWriter("Ошибка загрузки конфигурации камеры!");
                     DialogResult res = MessageBox.Show(caption: "Ошибка загрузки конфигурации камеры",
                         text: "Конфиг не установлен" + System.Environment.NewLine + "Повторить установку?",
@@ -88,13 +91,19 @@ namespace WSC_AI
 
                     if (res == DialogResult.Yes)
                     {
-                    goto set_config;
+                        goto set_config;
                     }
 
                     else
                     {
                         this.IsSetConfig = false;
                     }
+                    }
+                   catch (Exception)
+                    {
+
+                    }
+                    
 
                 }
             

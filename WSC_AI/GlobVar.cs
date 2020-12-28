@@ -14,6 +14,11 @@ namespace WSC_AI
         public UInt16 MaxBufferSize = 10; 
 
         public String Server_Name= "opc.tcp://127.0.0.1:4334";
+
+        public String ImageSavePath = "D:\\Images";
+        public int SleepProcessCam = 200;
+        public int SleepProcessImage = 1000;
+        public volatile bool OPC_Connecting;
     }
 
     struct TScan_and_Images

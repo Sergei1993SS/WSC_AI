@@ -7,12 +7,16 @@ namespace WSC_AI
 {
     class OPC : Globals
     {
-        OpcClient Client;
+        public OpcClient Client;
          
         public OPC()
         {
-            connect_opc:
+        connect_opc:
             Client = new OpcClient(Server_Name);
+            Client.DisconnectTimeout = 1000;
+            Client.SessionTimeout = 2147483647;  //2147483647     
+            Client.ReconnectTimeout = 20;
+            
 
             try
             {
@@ -43,6 +47,7 @@ namespace WSC_AI
                 Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.isCameraInPosition");
                 if (value.Status.IsGood)
                 {
+                    OPC_Connecting = true;
                     return (bool)value.Value;
                 }
                 else
@@ -51,11 +56,26 @@ namespace WSC_AI
                     goto get_node;
 
                 }
+
+
             }
             catch (Exception)
             {
 
-                LogWriter log = new LogWriter("Ошибка получения isCameraInPosition");
+                LogWriter log = new LogWriter("Ошибка получения isCameraInPosition(Исключение). Переподключение к серверу");
+                OPC_Connecting = false;
+                try
+                {
+                    log = new LogWriter("Разрываем соеденение: " + Client.State.ToString());
+                    Client.Disconnect();
+                    log = new LogWriter("Разорвали соеденение: " + Client.State.ToString());
+                }
+                catch (Exception)
+                {
+                    log = new LogWriter("Ошибка разрыва: " + Client.State.ToString());
+                }
+
+                Reconnect();
                 goto get_node;
             }
             
@@ -71,13 +91,29 @@ namespace WSC_AI
                 if (!status.IsGood)
                 {
                     LogWriter log = new LogWriter("Ошибка записи isCameraInPosition");
+                    
                     goto set_node;
+                }
+                else
+                {
+                    OPC_Connecting = true;
                 }
             }
             catch (Exception)
             {
 
-                LogWriter log = new LogWriter("Ошибка записи isCameraInPosition");
+                LogWriter log = new LogWriter("Ошибка записи isCameraInPosition(Исключение). Переподключение");
+                OPC_Connecting = false;
+                try
+                {
+                    Client.Disconnect();
+                }
+                catch (Exception)
+                {
+
+                }
+
+                Reconnect();
                 goto set_node;
             }
             
@@ -91,16 +127,32 @@ namespace WSC_AI
             try
             {
                 Opc.UaFx.OpcStatus status = Client.WriteNode("ns=1;s=MainChannel.MetrologPC.isCameraShotComplete", true);
+                OPC_Connecting = false;
                 if (!status.IsGood)
                 {
                     LogWriter log = new LogWriter("Ошибка записи isCameraShotComplete");
                     goto set_node;
                 }
+                else
+                {
+                    OPC_Connecting = true;
+                }
             }
             catch (Exception)
             {
 
-                LogWriter log = new LogWriter("Ошибка записи isCameraShotComplete");
+                LogWriter log = new LogWriter("Ошибка записи isCameraShotComplete(Исключение). Переподключение");
+                OPC_Connecting = false;
+                try
+                {
+                    Client.Disconnect();
+                }
+                catch (Exception)
+                {
+
+                }
+
+                Reconnect();
                 goto set_node;
             }
             
@@ -115,6 +167,7 @@ namespace WSC_AI
                 Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolX");
                 if (value.Status.IsGood)
                 {
+                    OPC_Connecting = true;
                     return (double)value.Value;
                 }
                 else
@@ -127,7 +180,18 @@ namespace WSC_AI
             catch (Exception)
             {
 
-                LogWriter log = new LogWriter("Ошибка получения ToolX");
+                LogWriter log = new LogWriter("Ошибка получения ToolX(Исключение). Переподключение");
+                OPC_Connecting = false;
+                try
+                {
+                    Client.Disconnect();
+                }
+                catch (Exception)
+                {
+
+                }
+
+                Reconnect();
                 goto get_node;
             }
             
@@ -141,6 +205,7 @@ namespace WSC_AI
                 Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolY");
                 if (value.Status.IsGood)
                 {
+                    OPC_Connecting = true;
                     return (double)value.Value;
                 }
                 else
@@ -153,7 +218,18 @@ namespace WSC_AI
             catch (Exception)
             {
 
-                LogWriter log = new LogWriter("Ошибка получения ToolY");
+                LogWriter log = new LogWriter("Ошибка получения ToolY(Исключение). Переподключение");
+                OPC_Connecting = false;
+                try
+                {
+                    Client.Disconnect();
+                }
+                catch (Exception)
+                {
+
+                }
+
+                Reconnect();
                 goto get_node;
             }
             
@@ -167,6 +243,7 @@ namespace WSC_AI
                 Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolZ");
                 if (value.Status.IsGood)
                 {
+                    OPC_Connecting = true;
                     return (double)value.Value;
                 }
                 else
@@ -179,7 +256,18 @@ namespace WSC_AI
             catch (Exception)
             {
 
-                LogWriter log = new LogWriter("Ошибка получения ToolZ");
+                LogWriter log = new LogWriter("Ошибка получения ToolZ(Исключение). Переподключение");
+                OPC_Connecting = false;
+                try
+                {
+                    Client.Disconnect();
+                }
+                catch (Exception)
+                {
+
+                }
+
+                Reconnect();
                 goto get_node;
             }
             
@@ -193,6 +281,7 @@ namespace WSC_AI
                 Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolW");
                 if (value.Status.IsGood)
                 {
+                    OPC_Connecting = true;
                     return (double)value.Value;
                 }
                 else
@@ -205,7 +294,18 @@ namespace WSC_AI
             catch (Exception)
             {
 
-                LogWriter log = new LogWriter("Ошибка получения ToolW");
+                LogWriter log = new LogWriter("Ошибка получения ToolW(Исключение). Переподключение");
+                OPC_Connecting = false;
+                try
+                {
+                    Client.Disconnect();
+                }
+                catch (Exception)
+                {
+
+                }
+
+                Reconnect();
                 goto get_node;
             }
             
@@ -219,6 +319,7 @@ namespace WSC_AI
                 Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolR");
                 if (value.Status.IsGood)
                 {
+                    OPC_Connecting = true;
                     return (double)value.Value;
                 }
                 else
@@ -231,7 +332,18 @@ namespace WSC_AI
             catch (Exception)
             {
 
-                LogWriter log = new LogWriter("Ошибка получения ToolR");
+                LogWriter log = new LogWriter("Ошибка получения ToolR(Исключение). Переподключение");
+                OPC_Connecting = false;
+                try
+                {
+                    Client.Disconnect();
+                }
+                catch (Exception)
+                {
+
+                }
+
+                Reconnect();
                 goto get_node;
             }
             
@@ -245,6 +357,7 @@ namespace WSC_AI
                 Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.ToolP");
                 if (value.Status.IsGood)
                 {
+                    OPC_Connecting = true;
                     return (double)value.Value;
                 }
                 else
@@ -257,10 +370,23 @@ namespace WSC_AI
             catch (Exception)
             {
 
-                LogWriter log = new LogWriter("Ошибка получения ToolP");
+                Reconnect();
                 goto get_node;  
             }
             
+        }
+
+        private void Reconnect()
+        {
+            try
+            {
+                LogWriter log = new LogWriter("Подключаемся заново: " + Client.State.ToString());
+                Client.Connect();
+            }
+            catch (Exception)
+            {
+                LogWriter log = new LogWriter("Неудачная попытка " + Client.State.ToString());
+            }
         }
 
 

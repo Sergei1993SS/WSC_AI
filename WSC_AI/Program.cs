@@ -14,7 +14,7 @@ namespace WSC_AI
         [STAThread]
         static void Main()
         {
-            LogWriter log = new LogWriter("Программа запущена");
+            LogWriter log = new LogWriter("---------------------------Программа запущена----------------------------------");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Main_Form());
