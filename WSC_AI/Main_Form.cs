@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.Drawing;
 using System.IO;
-using Opc.UaFx.Client;
 
 
 namespace WSC_AI
