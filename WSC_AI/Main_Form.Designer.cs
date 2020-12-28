@@ -29,40 +29,23 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main_Form));
-            this.pictureBox_main = new System.Windows.Forms.PictureBox();
-            this.button_basler = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.pictureBox_cam = new System.Windows.Forms.PictureBox();
             this.label_api_cam = new System.Windows.Forms.Label();
             this.label_sn_cam = new System.Windows.Forms.Label();
             this.label_cam_model = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_main)).BeginInit();
+            this.pictureBox_cam = new System.Windows.Forms.PictureBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label_opc = new System.Windows.Forms.Label();
+            this.pictureBox_opc = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_cam)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_opc)).BeginInit();
             this.SuspendLayout();
-            // 
-            // pictureBox_main
-            // 
-            this.pictureBox_main.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox_main.Location = new System.Drawing.Point(13, 13);
-            this.pictureBox_main.Name = "pictureBox_main";
-            this.pictureBox_main.Size = new System.Drawing.Size(682, 639);
-            this.pictureBox_main.TabIndex = 0;
-            this.pictureBox_main.TabStop = false;
-            // 
-            // button_basler
-            // 
-            this.button_basler.Location = new System.Drawing.Point(971, 533);
-            this.button_basler.Name = "button_basler";
-            this.button_basler.Size = new System.Drawing.Size(207, 119);
-            this.button_basler.TabIndex = 1;
-            this.button_basler.Text = "Запустить";
-            this.button_basler.UseVisualStyleBackColor = true;
-            this.button_basler.Click += new System.EventHandler(this.button_basler_Click);
             // 
             // label1
             // 
@@ -76,6 +59,13 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.pictureBox_opc);
+            this.groupBox1.Controls.Add(this.label_opc);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.pictureBox_cam);
             this.groupBox1.Controls.Add(this.label_api_cam);
             this.groupBox1.Controls.Add(this.label_sn_cam);
@@ -85,22 +75,12 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox1.Location = new System.Drawing.Point(711, 13);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(369, 417);
+            this.groupBox1.Size = new System.Drawing.Size(789, 435);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Состояние загрузки системы";
-            // 
-            // pictureBox_cam
-            // 
-            this.pictureBox_cam.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox_cam.InitialImage = null;
-            this.pictureBox_cam.Location = new System.Drawing.Point(181, 31);
-            this.pictureBox_cam.Name = "pictureBox_cam";
-            this.pictureBox_cam.Size = new System.Drawing.Size(19, 16);
-            this.pictureBox_cam.TabIndex = 9;
-            this.pictureBox_cam.TabStop = false;
             // 
             // label_api_cam
             // 
@@ -159,30 +139,74 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Модель:";
             // 
+            // pictureBox_cam
+            // 
+            this.pictureBox_cam.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox_cam.InitialImage = null;
+            this.pictureBox_cam.Location = new System.Drawing.Point(181, 31);
+            this.pictureBox_cam.Name = "pictureBox_cam";
+            this.pictureBox_cam.Size = new System.Drawing.Size(19, 16);
+            this.pictureBox_cam.TabIndex = 9;
+            this.pictureBox_cam.TabStop = false;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(27, 161);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(130, 16);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Состояние  OPC:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(51, 192);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(51, 16);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Адрес:";
+            // 
+            // label_opc
+            // 
+            this.label_opc.AutoSize = true;
+            this.label_opc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_opc.Location = new System.Drawing.Point(108, 192);
+            this.label_opc.Name = "label_opc";
+            this.label_opc.Size = new System.Drawing.Size(0, 16);
+            this.label_opc.TabIndex = 12;
+            // 
+            // pictureBox_opc
+            // 
+            this.pictureBox_opc.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox_opc.InitialImage = null;
+            this.pictureBox_opc.Location = new System.Drawing.Point(159, 161);
+            this.pictureBox_opc.Name = "pictureBox_opc";
+            this.pictureBox_opc.Size = new System.Drawing.Size(19, 16);
+            this.pictureBox_opc.TabIndex = 13;
+            this.pictureBox_opc.TabStop = false;
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1190, 664);
+            this.ClientSize = new System.Drawing.Size(813, 506);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.button_basler);
-            this.Controls.Add(this.pictureBox_main);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main_Form";
             this.Text = "WSC_AI";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_Form_FormClosing);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_main)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_cam)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_opc)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictureBox_main;
-        private System.Windows.Forms.Button button_basler;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label_api_cam;
@@ -192,6 +216,10 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         public System.Windows.Forms.PictureBox pictureBox_cam;
+        private System.Windows.Forms.Label label_opc;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        public System.Windows.Forms.PictureBox pictureBox_opc;
     }
 }
 

@@ -6,12 +6,12 @@ using OpenCvSharp;
 
 namespace WSC_AI
 {
-    class Capture
+    class Capture : Globals
     {
         public Camera Basler_camera;
         public bool IsFind = false;
         public bool IsSetConfig = false;
-        public Globals GlobalVar = new Globals();
+        //public Globals GlobalVar = new Globals();
 
 
         public Capture()
@@ -43,6 +43,7 @@ namespace WSC_AI
                 
                 }
             
+            
         }
 
         /// <summary>
@@ -55,8 +56,8 @@ namespace WSC_AI
                 try
                 {
                     this.Basler_camera.Open();
-                    this.Basler_camera.Parameters.Load(GlobalVar.CamConfigPath, ParameterPath.CameraDevice);
-                    LogWriter log = new LogWriter("Загружен конфиг: " + GlobalVar.CamConfigPath);
+                    this.Basler_camera.Parameters.Load(CamConfigPath, ParameterPath.CameraDevice);
+                    LogWriter log = new LogWriter("Загружен конфиг: " + CamConfigPath);
                     this.IsSetConfig = true;
 
                     // Enable the chunk mode.
@@ -68,7 +69,7 @@ namespace WSC_AI
                     // Enable time stamp chunks.
                     this.Basler_camera.Parameters[PLCamera.ChunkSelector].SetValue(PLCamera.ChunkSelector.Timestamp);
                     this.Basler_camera.Parameters[PLCamera.ChunkEnable].SetValue(true);
-                    this.Basler_camera.Parameters[PLCameraInstance.MaxNumBuffer].SetValue(this.GlobalVar.MaxBufferSize);
+                    this.Basler_camera.Parameters[PLCameraInstance.MaxNumBuffer].SetValue(MaxBufferSize);
 
                     // Enable CRC checksum chunks.
                     this.Basler_camera.Parameters[PLCamera.ChunkSelector].SetValue(PLCamera.ChunkSelector.PayloadCRC16);
@@ -79,6 +80,8 @@ namespace WSC_AI
             }
                 catch (Exception)
                 {
+                   try
+                    {   
                     LogWriter log = new LogWriter("Ошибка загрузки конфигурации камеры!");
                     DialogResult res = MessageBox.Show(caption: "Ошибка загрузки конфигурации камеры",
                         text: "Конфиг не установлен" + System.Environment.NewLine + "Повторить установку?",
@@ -88,13 +91,19 @@ namespace WSC_AI
 
                     if (res == DialogResult.Yes)
                     {
-                    goto set_config;
+                        goto set_config;
                     }
 
                     else
                     {
                         this.IsSetConfig = false;
                     }
+                    }
+                   catch (Exception)
+                    {
+
+                    }
+                    
 
                 }
             
@@ -104,53 +113,63 @@ namespace WSC_AI
         {
 
         Grab:
-            // Wait for an image and then retrieve it. A timeout of 5000 ms is used.
-            IGrabResult grabResult = this.Basler_camera.StreamGrabber.GrabOne(5000, TimeoutHandling.ThrowException);
-            using (grabResult)
+            try
             {
-                // Image grabbed successfully?
-                if (grabResult.GrabSucceeded)
+                // Wait for an image and then retrieve it. A timeout of 5000 ms is used.
+                IGrabResult grabResult = this.Basler_camera.StreamGrabber.GrabOne(5000, TimeoutHandling.ThrowException);
+                using (grabResult)
                 {
-                    // Check to see if a buffer containing chunk data has been received.
-                    if (PayloadType.ChunkData != grabResult.PayloadTypeValue)
+                    // Image grabbed successfully?
+                    if (grabResult.GrabSucceeded)
                     {
-                        LogWriter log = new LogWriter("Буфер, содержащий метаданные не был получен");
+                        // Check to see if a buffer containing chunk data has been received.
+                        if (PayloadType.ChunkData != grabResult.PayloadTypeValue)
+                        {
+                            LogWriter log = new LogWriter("Буфер, содержащий метаданные не был получен");
+                            goto Grab;
+                        }
+
+                        // Because we have enabled the CRC Checksum feature, we can check
+                        // the integrity of the buffer.
+                        // Note: Enabling the CRC Checksum feature is not a prerequisite for using chunks.
+                        // Chunks can also be handled when the CRC Checksum feature is disabled.
+                        if (grabResult.HasCRC && grabResult.CheckCRC() == false)
+                        {
+                            LogWriter log = new LogWriter("Нарушена целостность передаваемых данных");
+                            goto Grab;
+                        }
+
+                        // Access the chunk data attached to the result.
+                        // Before accessing the chunk data, you should check to see
+                        // if the chunk is readable. If it is readable, the buffer
+                        // contains the requested chunk data.
+                        if (!grabResult.ChunkData[PLChunkData.ChunkTimestamp].IsReadable)
+                        {
+                            LogWriter log = new LogWriter("Время съемки кадра невозможно прочитать");
+                            goto Grab;
+                        }
+
+
+                    }
+                    else
+                    {
+                        LogWriter log = new LogWriter("Неудачная попытка захвата кадра");
                         goto Grab;
                     }
 
-                    // Because we have enabled the CRC Checksum feature, we can check
-                    // the integrity of the buffer.
-                    // Note: Enabling the CRC Checksum feature is not a prerequisite for using chunks.
-                    // Chunks can also be handled when the CRC Checksum feature is disabled.
-                    if (grabResult.HasCRC && grabResult.CheckCRC() == false)
-                    {
-                        LogWriter log = new LogWriter("Нарушена целостность передаваемых данных");
-                        goto Grab;
-                    }
+                    //IGrabResult res = grabResult.Clone();
+                    //grabResult.Dispose();
 
-                    // Access the chunk data attached to the result.
-                    // Before accessing the chunk data, you should check to see
-                    // if the chunk is readable. If it is readable, the buffer
-                    // contains the requested chunk data.
-                    if (!grabResult.ChunkData[PLChunkData.ChunkTimestamp].IsReadable)
-                    {
-                        LogWriter log = new LogWriter("Время съемки кадра невозможно прочитать");
-                        goto Grab;
-                    }
-
-
+                    return grabResult.Clone();
                 }
-                else
-                {
-                    LogWriter log = new LogWriter("Неудачная попытка захвата кадра");
-                    goto Grab;
-                }
-
-                //IGrabResult res = grabResult.Clone();
-                //grabResult.Dispose();
-                
-                return grabResult.Clone();
             }
+            catch (Exception)
+            {
+
+                LogWriter log = new LogWriter("Получено исключение при попытке захвата кадра");
+                goto Grab;
+            }
+            
 
         }
 

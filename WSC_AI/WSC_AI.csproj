@@ -26,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,6 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>brain.ico</ApplicationIcon>
@@ -340,6 +342,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="brain.ico" />
+    <None Include="Resources\gray.png" />
+    <None Include="Resources\green.png" />
+    <None Include="Resources\red.png" />
+    <None Include="Resources\red.bmp" />
     <None Include="Resources\tick.png" />
     <None Include="Resources\cross.png" />
   </ItemGroup>

@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Reflection;
-using System.IO;
+using Basler.Pylon;
 
 
 namespace WSC_AI
@@ -13,8 +12,36 @@ namespace WSC_AI
 
         //Максимальное количество снимков в буфере
         public UInt16 MaxBufferSize = 10; 
+
+        public String Server_Name= "opc.tcp://127.0.0.1:4334";
+
+        public String ImageSavePath = "D:\\Images";
+        public int SleepProcessCam = 200;
+        public int SleepProcessImage = 1000;
+        public volatile bool OPC_Connecting;
     }
 
+    struct TScan_and_Images
+    {
+        public double X;
+        public double Y;
+        public double Z;
+        public double Rx;
+        public double Ry;
+        public double Rz;
+        public IGrabResult GrabImage;
 
+        public TScan_and_Images(IGrabResult DRI, double _X, double _Y, double _Z, double _Rx, double _Ry, double _Rz)
+        {
+            GrabImage = DRI;
+            X = _X;
+            Y = _Y;
+            Z = _Z;
+            Rx = _Rx;
+            Ry = _Ry;
+            Rz = _Rz;
+
+        }
+    }
     
 }
