@@ -222,9 +222,10 @@ namespace WSC_AI
             }
             else
             {
-                Directory.CreateDirectory(m_exePath);
+                
                 try
                 {
+                    Directory.CreateDirectory(m_exePath);
                     Cv2.ImWrite(img_path, cap.convertToMat(gbr));
                 }
                 catch (Exception ex)
