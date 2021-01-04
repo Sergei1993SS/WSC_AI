@@ -2,12 +2,12 @@
 using System.Windows.Forms;
 using Basler.Pylon;
 using System.Collections.Generic;
-using OpenCvSharp;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.Drawing;
 using System.IO;
+using OpenCvSharp;
 
 
 namespace WSC_AI
@@ -21,10 +21,16 @@ namespace WSC_AI
 
         
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Main_Form()
         {
             InitializeComponent();
-            cap = new Capture();
+            AI_TF test = new AI_TF();
+            test.Run();
+
+            /*cap = new Capture();
             cap.SetConfig();
             OPC_client = new OPC();
             Images = new ConcurrentQueue<TScan_and_Images>();
@@ -58,7 +64,7 @@ namespace WSC_AI
                 pictureBox_cam.BackgroundImage = WSC_AI.Properties.Resources.red;
                 pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.red;
                 pictureBox_cam.Refresh();
-            }
+            }*/
         }
 
 
@@ -209,7 +215,6 @@ namespace WSC_AI
             {
                 try
                 {
-                    Mat img = cap.convertToMat(gbr);
                     
                     Cv2.ImWrite(img_path, cap.convertToMat(gbr));
                     

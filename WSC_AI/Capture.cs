@@ -1,7 +1,7 @@
 ﻿using Basler.Pylon;
 using System.Windows.Forms;
 using System;
-using OpenCvSharp;
+
 
 
 namespace WSC_AI
@@ -173,13 +173,13 @@ namespace WSC_AI
 
         }
 
-        public Mat convertToMat(IGrabResult rtnGrabResult)
+        public OpenCvSharp.Mat convertToMat(IGrabResult rtnGrabResult)
         {
             PixelDataConverter converter = new PixelDataConverter();
             converter.OutputPixelFormat = PixelType.BGR8packed;
             byte[] buffer = new byte[converter.GetBufferSizeForConversion(rtnGrabResult)];
             converter.Convert(buffer, rtnGrabResult);
-            return new Mat(rtnGrabResult.Height, rtnGrabResult.Width, MatType.CV_8UC3, buffer);
+            return new OpenCvSharp.Mat(rtnGrabResult.Height, rtnGrabResult.Width, OpenCvSharp.MatType.CV_8UC3, buffer); //rtnGrabResult.Height, rtnGrabResult.Width, MatType.CV_8UC3, buffer
         }
 
     }
