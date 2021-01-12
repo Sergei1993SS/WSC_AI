@@ -12,7 +12,6 @@ namespace WSC_AI
         public Camera Basler_camera;
         public bool IsFind = false;
         public bool IsSetConfig = false;
-        //public Globals GlobalVar = new Globals();
 
 
         public Capture()

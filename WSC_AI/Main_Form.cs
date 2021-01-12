@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
-using Basler.Pylon;
-using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Collections.Concurrent;
-using System.Drawing;
 using System.IO;
 using OpenCvSharp;
+using NumSharp;
 
 
 namespace WSC_AI
@@ -17,9 +14,9 @@ namespace WSC_AI
         Capture cap;
         OPC OPC_client;
         ConcurrentQueue<TScan_and_Images> Images;
-        PixelDataConverter converter;
+        AI_TF AI;
 
-        
+
 
         /// <summary>
         /// 
@@ -27,8 +24,8 @@ namespace WSC_AI
         public Main_Form()
         {
             InitializeComponent();
-            AI_TF test = new AI_TF();
-            test.Run();
+
+
 
             /*cap = new Capture();
             cap.SetConfig();
@@ -65,6 +62,34 @@ namespace WSC_AI
                 pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.red;
                 pictureBox_cam.Refresh();
             }*/
+
+
+            AI = new AI_TF();
+
+            if (AI.load_graph_Presence_Weld)
+            {
+                  pictureBox_NS_1.BackgroundImage = WSC_AI.Properties.Resources.green;
+            }
+            else pictureBox_NS_1.BackgroundImage = WSC_AI.Properties.Resources.red;
+            if (AI.load_graph_Defects_Weld)
+            {
+                pictureBox_NS_2.BackgroundImage = WSC_AI.Properties.Resources.green;
+            }
+            else pictureBox_NS_2.BackgroundImage = WSC_AI.Properties.Resources.red;
+            if (AI.load_Session_Presence_Weld)
+            {
+                pictureBox_sess_1.BackgroundImage = WSC_AI.Properties.Resources.green;
+            }
+            else pictureBox_sess_1.BackgroundImage = WSC_AI.Properties.Resources.red;
+            if (AI.load_Session_Defects_Weld)
+            {
+                pictureBox_sess_2.BackgroundImage = WSC_AI.Properties.Resources.green;
+            }
+            else pictureBox_sess_2.BackgroundImage = WSC_AI.Properties.Resources.red;
+            pictureBox_NS_1.Refresh();
+            pictureBox_NS_2.Refresh();
+            pictureBox_sess_1.Refresh();
+            pictureBox_sess_2.Refresh();
         }
 
 
@@ -142,21 +167,24 @@ namespace WSC_AI
                     {
                         TScan_and_Images sample;
                         Images.TryDequeue(out sample);
-                        
-                        SaveImage(sample.GrabImage);
+                        Mat image = cap.convertToMat(sample.GrabImage);
+
+                        SaveImage(image, sample.GrabImage.Timestamp.ToString());
+
+                        NDArray arr_weld = AI.load_vol(image, AI.size_weld_presence);
+
+                        if (AI.weld_in_place(arr_weld))
+                        {
+                            ///////
+                        }
+                        else
+                        {
+                            //////
+                        }
 
 
                         GC.Collect();
 
-
-
-                        //Bitmap bitmap = new Bitmap(sample.GrabImage.Width, sample.GrabImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-                        //System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bitmap.PixelFormat);
-                        //converter.OutputPixelFormat = PixelType.BGRA8packed;
-                        //IntPtr ptrBmp = bmpData.Scan0;
-                        //converter.Convert(ptrBmp, bmpData.Stride * bitmap.Height, sample.GrabImage);
-                        //bitmap.UnlockBits(bmpData);
-                        //BeginInvoke(new InvokeDelegate(InvokeMethod), bitmap);
                     }
                     else
                     {
@@ -206,17 +234,17 @@ namespace WSC_AI
             
         }
 
-        private void SaveImage(IGrabResult gbr)
+        private void SaveImage(Mat img, String Timestamp)
         {
             String m_exePath = cap.ImageSavePath + "//" + DateTime.Now.ToShortDateString();
-            String img_path = m_exePath + "//" + gbr.Timestamp + ".jpg";
+            String img_path = m_exePath + "//" + Timestamp + ".jpg";
 
             if (Directory.Exists(m_exePath))
             {
                 try
                 {
                     
-                    Cv2.ImWrite(img_path, cap.convertToMat(gbr));
+                    Cv2.ImWrite(img_path, img);
                     
                 }
                 catch (Exception ex)
@@ -230,7 +258,7 @@ namespace WSC_AI
                 try
                 {
                     Directory.CreateDirectory(m_exePath);
-                    Cv2.ImWrite(img_path, cap.convertToMat(gbr));
+                    Cv2.ImWrite(img_path, img);
                 }
                 catch (Exception ex)
                 {

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\SciSharp.TensorFlow.Redist-Windows-GPU.2.4.0\build\netstandard2.0\SciSharp.TensorFlow.Redist-Windows-GPU.props" Condition="Exists('..\packages\SciSharp.TensorFlow.Redist-Windows-GPU.2.4.0\build\netstandard2.0\SciSharp.TensorFlow.Redist-Windows-GPU.props')" />
   <Import Project="..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\build\OpenCvSharp3-AnyCPU.props" Condition="Exists('..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\build\OpenCvSharp3-AnyCPU.props')" />
-  <Import Project="..\packages\SciSharp.TensorFlow.Redist.2.4.0\build\netstandard2.0\SciSharp.TensorFlow.Redist.props" Condition="Exists('..\packages\SciSharp.TensorFlow.Redist.2.4.0\build\netstandard2.0\SciSharp.TensorFlow.Redist.props')" />
   <Import Project="..\packages\MethodBoundaryAspect.Fody.2.0.138\build\MethodBoundaryAspect.Fody.props" Condition="Exists('..\packages\MethodBoundaryAspect.Fody.2.0.138\build\MethodBoundaryAspect.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -109,6 +109,9 @@
     <Reference Include="Microsoft.AspNetCore.WebUtilities, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.WebUtilities.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Configuration, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Configuration.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
     </Reference>
@@ -124,11 +127,11 @@
     <Reference Include="Microsoft.Extensions.Configuration.FileExtensions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Configuration.FileExtensions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.FileExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.2.2.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=5.0.0.1, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.5.0.1\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.5.0.0\lib\net461\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Extensions.FileProviders.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.FileProviders.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.FileProviders.Abstractions.dll</HintPath>
@@ -172,8 +175,8 @@
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NumSharp.Lite, Version=0.1.9.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\NumSharp.Lite.0.1.9\lib\netstandard2.0\NumSharp.Lite.dll</HintPath>
+    <Reference Include="NumSharp.Lite, Version=0.1.10.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\NumSharp.Lite.0.1.10\lib\netstandard2.0\NumSharp.Lite.dll</HintPath>
     </Reference>
     <Reference Include="Opc.UaFx.Advanced, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0220af0d33d50236, processorArchitecture=MSIL">
       <HintPath>..\packages\Opc.UaFx.Advanced.2.11.5\lib\net471\Opc.UaFx.Advanced.dll</HintPath>
@@ -296,9 +299,8 @@
     <Reference Include="System.Text.Encodings.Web, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.4.5.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
@@ -317,8 +319,8 @@
       <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="TensorFlow.NET, Version=0.31.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\TensorFlow.NET.0.31.1\lib\netstandard2.0\TensorFlow.NET.dll</HintPath>
+    <Reference Include="TensorFlow.NET, Version=0.32.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\TensorFlow.NET.0.32.0\lib\netstandard2.0\TensorFlow.NET.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -339,7 +341,7 @@
       <DependentUpon>Main_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -364,10 +366,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="brain.ico" />
+    <None Include="Resources\frozen_graph.pb" />
+    <None Include="Resources\frozen_graph_defects.pb" />
     <None Include="Resources\gray.png" />
     <None Include="Resources\green.png" />
     <None Include="Resources\red.png" />
     <None Include="Resources\red.bmp" />
+    <None Include="Resources\small_model_classifier_weld_96_99.h5" />
     <None Include="Resources\tick.png" />
     <None Include="Resources\cross.png" />
   </ItemGroup>
@@ -377,9 +382,9 @@
       <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\MethodBoundaryAspect.Fody.2.0.138\build\MethodBoundaryAspect.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MethodBoundaryAspect.Fody.2.0.138\build\MethodBoundaryAspect.Fody.props'))" />
-    <Error Condition="!Exists('..\packages\SciSharp.TensorFlow.Redist.2.4.0\build\netstandard2.0\SciSharp.TensorFlow.Redist.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SciSharp.TensorFlow.Redist.2.4.0\build\netstandard2.0\SciSharp.TensorFlow.Redist.props'))" />
     <Error Condition="!Exists('..\packages\Fody.6.0.5\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.0.5\build\Fody.targets'))" />
     <Error Condition="!Exists('..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\build\OpenCvSharp3-AnyCPU.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\build\OpenCvSharp3-AnyCPU.props'))" />
+    <Error Condition="!Exists('..\packages\SciSharp.TensorFlow.Redist-Windows-GPU.2.4.0\build\netstandard2.0\SciSharp.TensorFlow.Redist-Windows-GPU.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SciSharp.TensorFlow.Redist-Windows-GPU.2.4.0\build\netstandard2.0\SciSharp.TensorFlow.Redist-Windows-GPU.props'))" />
   </Target>
   <Import Project="..\packages\Fody.6.0.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.0.5\build\Fody.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
