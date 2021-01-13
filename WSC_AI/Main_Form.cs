@@ -5,6 +5,8 @@ using System.Collections.Concurrent;
 using System.IO;
 using OpenCvSharp;
 using NumSharp;
+using Basler.Pylon;
+using System.Threading.Tasks;
 
 
 namespace WSC_AI
@@ -27,42 +29,12 @@ namespace WSC_AI
 
 
 
-            /*cap = new Capture();
+            cap = new Capture();
             cap.SetConfig();
             OPC_client = new OPC();
             Images = new ConcurrentQueue<TScan_and_Images>();
-            converter = new PixelDataConverter();
 
             OPC_client.OPC_Connecting = false;
-
-            if (cap.IsFind && cap.IsSetConfig)
-            {
-                pictureBox_cam.BackgroundImage = WSC_AI.Properties.Resources.green;
-                pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.green;
-                pictureBox_cam.Refresh();
-
-                label_cam_model.Text = cap.Basler_camera.CameraInfo[CameraInfoKey.ModelName];
-                label_sn_cam.Text = cap.Basler_camera.CameraInfo[CameraInfoKey.SerialNumber];
-                label_api_cam.Text = cap.Basler_camera.CameraInfo[CameraInfoKey.DeviceIpAddress];
-                label_opc.Text = OPC_client.Server_Name;
-                label_opc.Refresh();
-                label_api_cam.Refresh();
-                label_cam_model.Refresh();
-                label_sn_cam.Refresh();
-                
-                Task.Run(() => CameraProcess());
-                Task.Run(() => ImageProcess());
-                Task.Run(() => OPC_Indication());
-
-
-            }
-            else
-            {
-                pictureBox_cam.BackgroundImage = WSC_AI.Properties.Resources.red;
-                pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.red;
-                pictureBox_cam.Refresh();
-            }*/
-
 
             AI = new AI_TF();
 
@@ -90,6 +62,37 @@ namespace WSC_AI
             pictureBox_NS_2.Refresh();
             pictureBox_sess_1.Refresh();
             pictureBox_sess_2.Refresh();
+
+            if (cap.IsFind && cap.IsSetConfig)
+            {
+                pictureBox_cam.BackgroundImage = WSC_AI.Properties.Resources.green;
+                pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.green;
+                pictureBox_cam.Refresh();
+
+                label_cam_model.Text = cap.Basler_camera.CameraInfo[CameraInfoKey.ModelName];
+                label_sn_cam.Text = cap.Basler_camera.CameraInfo[CameraInfoKey.SerialNumber];
+                label_api_cam.Text = cap.Basler_camera.CameraInfo[CameraInfoKey.DeviceIpAddress];
+                label_opc.Text = OPC_client.Server_Name;
+                label_opc.Refresh();
+                label_api_cam.Refresh();
+                label_cam_model.Refresh();
+                label_sn_cam.Refresh();
+                
+                Task.Run(() => CameraProcess());
+                Task.Run(() => ImageProcess());
+                Task.Run(() => OPC_Indication());
+
+
+            }
+            else
+            {
+                pictureBox_cam.BackgroundImage = WSC_AI.Properties.Resources.red;
+                pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.red;
+                pictureBox_cam.Refresh();
+            }
+
+
+
         }
 
 
@@ -171,7 +174,7 @@ namespace WSC_AI
 
                         SaveImage(image, sample.GrabImage.Timestamp.ToString());
 
-                        NDArray arr_weld = AI.load_vol(image, AI.size_weld_presence);
+                        /*NDArray arr_weld = AI.load_vol(image, AI.size_weld_presence);
 
                         if (AI.weld_in_place(arr_weld))
                         {
@@ -182,6 +185,8 @@ namespace WSC_AI
                             //////
                         }
 
+                        //arr_weld = AI.load_vol(image, AI.size_weld_defect);
+                        //AI.weld_defects(arr_weld);*/
 
                         GC.Collect();
 
@@ -220,6 +225,10 @@ namespace WSC_AI
                         cap.Basler_camera.Close();
                         cap.Basler_camera.Dispose();
                     }
+
+                    OPC_client.Client.Disconnect();
+                    OPC_client.Client.Dispose();
+
                 }
                 catch (Exception)
                 {

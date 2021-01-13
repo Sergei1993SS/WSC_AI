@@ -1,7 +1,7 @@
 ﻿using NumSharp;
 using Tensorflow;
 using System.IO;
-using static Tensorflow.Binding;
+//using static Tensorflow.Binding;
 using System; 
 using System.Collections.Generic;
 using OpenCvSharp;
@@ -164,7 +164,7 @@ namespace WSC_AI
         sess_1:
             try
             {
-                Session_Presence_Weld = new Session(Graph_Defects_Weld, config_Presence_Weld);
+                Session_Presence_Weld = new Session(this.Graph_Presence_Weld, config_Presence_Weld);
                 LogWriter log = new LogWriter("Сессия НС 1 запущена");
                 this.load_Session_Presence_Weld = true;
 
@@ -346,12 +346,20 @@ namespace WSC_AI
             return Res;
         }
 
+
+        public void weld_defects(NDArray arr)
+        {
+            NDArray network_out = this.Session_Defects_Weld.run(this.output_operation_Defects_Weld.outputs[0], new FeedItem(this.input_operation_Defects_Weld.outputs[0], arr));
+            network_out = np.round_(network_out[0]);
+        }
+
         public bool weld_in_place(NDArray arr)
         {
             NDArray network_out = this.Session_Presence_Weld.run(this.output_operation_Presence_Weld.outputs[0], new FeedItem(this.input_operation_Presence_Weld.outputs[0], arr));
             network_out = np.round_(network_out[0]);
+            Session_Presence_Weld.close();
 
-            if (network_out == 1)
+            if (network_out[0] == 1)
             {
                 return true;
             }
