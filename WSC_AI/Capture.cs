@@ -4,6 +4,7 @@ using System;
 using OpenCvSharp;
 
 
+
 namespace WSC_AI
 {
     class Capture : Globals
@@ -11,7 +12,6 @@ namespace WSC_AI
         public Camera Basler_camera;
         public bool IsFind = false;
         public bool IsSetConfig = false;
-        //public Globals GlobalVar = new Globals();
 
 
         public Capture()
@@ -179,7 +179,7 @@ namespace WSC_AI
             converter.OutputPixelFormat = PixelType.BGR8packed;
             byte[] buffer = new byte[converter.GetBufferSizeForConversion(rtnGrabResult)];
             converter.Convert(buffer, rtnGrabResult);
-            return new Mat(rtnGrabResult.Height, rtnGrabResult.Width, MatType.CV_8UC3, buffer);
+            return new Mat(rtnGrabResult.Height, rtnGrabResult.Width, MatType.CV_8UC3, buffer); //rtnGrabResult.Height, rtnGrabResult.Width, MatType.CV_8UC3, buffer
         }
 
     }
