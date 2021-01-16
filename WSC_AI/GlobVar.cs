@@ -20,12 +20,14 @@ namespace WSC_AI
         public int SleepProcessCam = 200;
         public int SleepProcessImage = 1000;
         public volatile bool OPC_Connecting;
+        public volatile int INDEX_DEFECT = 0;
 
         public double GPU_memory_Presence_Weld = 0.1;
         public double GPU_memory_Defects_Weld = 0.9;
 
         public Size size_weld_defect = new Size(1748, 1348);
         public Size size_weld_presence = new Size(612, 512);
+        public Size image2base = new Size(612, 512);
     }
 
     struct TScan_and_Images

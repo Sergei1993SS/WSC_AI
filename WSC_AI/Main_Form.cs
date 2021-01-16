@@ -7,27 +7,33 @@ using OpenCvSharp;
 using NumSharp;
 using Basler.Pylon;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Grapevine;
+using System.Collections.Generic;
+using DefectMessageNamespace;
+using System.Text.Json;
 
 
 namespace WSC_AI
 {
+    
     public partial class Main_Form : Form
     {
         Capture cap;
         OPC OPC_client;
         ConcurrentQueue<TScan_and_Images> Images;
         AI_TF AI;
-
-
+        static public ConcurrentQueue<Defect> defects = new ConcurrentQueue<Defect>();
+        static public List<Defect> defect_out = new List<Defect>();
+        static public volatile bool REST_RUN;
 
         /// <summary>
         /// 
         /// </summary>
         public Main_Form()
         {
-            InitializeComponent();
-
-
+            
 
             cap = new Capture();
             cap.SetConfig();
@@ -37,6 +43,26 @@ namespace WSC_AI
             OPC_client.OPC_Connecting = false;
 
             AI = new AI_TF();
+            Task.Run(() => RunREST());
+
+            InitializeComponent();
+
+            if (REST_RUN)
+            {
+                label_REST.Text = "http://localhost:5000";
+                label_REST.Refresh();
+                pictureBox_REST.BackgroundImage = Properties.Resources.green;
+                pictureBox_REST.Refresh();
+            }
+            else
+            {
+                label_REST.Text = "http://localhost:5000";
+                label_REST.Refresh();
+                pictureBox_REST.BackgroundImage = Properties.Resources.red;
+                pictureBox_REST.Refresh();
+            }
+
+            
 
             if (AI.load_graph_Presence_Weld)
             {
@@ -63,6 +89,8 @@ namespace WSC_AI
             pictureBox_sess_1.Refresh();
             pictureBox_sess_2.Refresh();
 
+
+
             if (cap.IsFind && cap.IsSetConfig)
             {
                 pictureBox_cam.BackgroundImage = WSC_AI.Properties.Resources.green;
@@ -81,6 +109,8 @@ namespace WSC_AI
                 Task.Run(() => CameraProcess());
                 Task.Run(() => ImageProcess());
                 Task.Run(() => OPC_Indication());
+                Task.Run(() => REST_Indication());
+
 
 
             }
@@ -94,7 +124,6 @@ namespace WSC_AI
 
 
         }
-
 
         /// <summary>
         /// Процесс съемки
@@ -158,6 +187,37 @@ namespace WSC_AI
             }
         }
 
+        private void REST_Indication()
+        {
+            while (true)
+            {
+                if (REST_RUN)
+                {
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        pictureBox_REST.BackgroundImage = Properties.Resources.green;
+                        pictureBox_REST.Refresh();
+                    }));
+                }
+                else
+                {
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        pictureBox_REST.BackgroundImage = Properties.Resources.red;
+                        pictureBox_REST.Refresh();
+                    }));
+                }
+
+                Thread.Sleep(600);
+                this.Invoke(new MethodInvoker(() =>
+                {
+                    pictureBox_REST.BackgroundImage = WSC_AI.Properties.Resources.gray;
+                    pictureBox_opc.Refresh();
+                }));
+                Thread.Sleep(600);
+            }
+        }
+
         private void ImageProcess()
         {
             
@@ -174,7 +234,7 @@ namespace WSC_AI
 
                         SaveImage(image, sample.GrabImage.Timestamp.ToString());
 
-                        /*NDArray arr_weld = AI.load_vol(image, AI.size_weld_presence);
+                        NDArray arr_weld = AI.load_vol(image, AI.size_weld_presence);
 
                         if (AI.weld_in_place(arr_weld))
                         {
@@ -182,7 +242,27 @@ namespace WSC_AI
                         }
                         else
                         {
-                            //////
+                            
+                            var defectCoordinates = new DefectCoordinates();
+                            defectCoordinates.X = sample.X;
+                            defectCoordinates.Y = sample.Y;
+                            defectCoordinates.Z = sample.Z;
+                            defectCoordinates.Xr = sample.Rx;
+                            defectCoordinates.Yr = sample.Ry;
+                            defectCoordinates.Zr = sample.Rz;
+
+                            var defect = new Defect();
+                            defect.DefectId = AI.INDEX_DEFECT;
+                            defect.DefectCoordinates = defectCoordinates;
+                            defect.Descriptions.Add("Шов не обнаружен");
+
+                            Mat To_Base = new Mat();
+                            Cv2.Resize(image, To_Base, AI.image2base);
+
+                            defect.ImageBase64 = Base64Image.Base64Encode(To_Base);
+                            
+                            defects.Enqueue(defect);
+                            AI.INDEX_DEFECT++; 
                         }
 
                         //arr_weld = AI.load_vol(image, AI.size_weld_defect);
@@ -274,6 +354,17 @@ namespace WSC_AI
                     LogWriter log = new LogWriter("Не удалось сохранить фотографию: " + img_path);
                 }
             }
+        }
+
+        private void Main_Form_Load(object sender, EventArgs e)
+        {
+           
+            
+        }
+
+        private void RunREST()
+        {
+            REST server = new REST();
         }
 
     }

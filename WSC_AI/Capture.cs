@@ -7,7 +7,7 @@ using OpenCvSharp;
 
 namespace WSC_AI
 {
-    class Capture : Globals
+    public class Capture : Globals
     {
         public Camera Basler_camera;
         public bool IsFind = false;
