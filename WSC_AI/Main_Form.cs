@@ -7,12 +7,10 @@ using OpenCvSharp;
 using NumSharp;
 using Basler.Pylon;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Grapevine;
 using System.Collections.Generic;
 using DefectMessageNamespace;
-using System.Text.Json;
+using System.Management;
+using System.Text;
 
 
 namespace WSC_AI
@@ -293,34 +291,38 @@ namespace WSC_AI
         /// <param name="e"></param>
         private void Main_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult res = MessageBox.Show(caption: "Закрытие программы",
+            if (!AI.ERR_CONNECT)
+            {
+                DialogResult res = MessageBox.Show(caption: "Закрытие программы",
                     text: "Уверены, что хотите закрыть программу? Это приведет к неработоспособности системы контроля шва",
                     buttons: MessageBoxButtons.YesNo, icon: MessageBoxIcon.Question, defaultButton: MessageBoxDefaultButton.Button3, options: MessageBoxOptions.ServiceNotification);
-            if (res == DialogResult.Yes)
-            {
-                try
+                if (res == DialogResult.Yes)
                 {
-                    if (cap.Basler_camera.IsOpen)
+                    try
                     {
-                        cap.Basler_camera.Close();
-                        cap.Basler_camera.Dispose();
+                        if (cap.Basler_camera.IsOpen)
+                        {
+                            cap.Basler_camera.Close();
+                            cap.Basler_camera.Dispose();
+                        }
+
+                        OPC_client.Client.Disconnect();
+                        OPC_client.Client.Dispose();
+
                     }
+                    catch (Exception)
+                    {
 
-                    OPC_client.Client.Disconnect();
-                    OPC_client.Client.Dispose();
-
+                    }
                 }
-                catch (Exception)
+                else
                 {
-
+                    e.Cancel = true;
                 }
             }
-            else
-            {
-                e.Cancel = true;
-            }
-            
-            
+            else e.Cancel = false;
+
+
         }
 
         private void SaveImage(Mat img, String Timestamp)
@@ -358,13 +360,42 @@ namespace WSC_AI
 
         private void Main_Form_Load(object sender, EventArgs e)
         {
-           
+            string code = UniqueMachineId();
+
+            if (code!= "LENOVO:PF10F6F2") //"LENOVO:PF10F6F2"
+            {
+                DialogResult res = MessageBox.Show(caption: "Ошибка доступа",
+                        text: "ПО не предназначено для работы на этом ПК." + System.Environment.NewLine + "Обратитесь за поддержкой к разработчику: sergei.sisyukin@gmail.com",
+                        buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error, defaultButton: MessageBoxDefaultButton.Button3, options: MessageBoxOptions.ServiceNotification);
+
+                AI.ERR_CONNECT = true;
+                this.Close();
+            }
             
         }
 
         private void RunREST()
         {
             REST server = new REST();
+        }
+
+        string UniqueMachineId()
+        {
+            StringBuilder builder = new StringBuilder();
+
+            String query = "SELECT * FROM Win32_BIOS";
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+            //  This should only find one
+            foreach (ManagementObject item in searcher.Get())
+            {
+                Object obj = item["Manufacturer"];
+                builder.Append(Convert.ToString(obj));
+                builder.Append(':');
+                obj = item["SerialNumber"];
+                builder.Append(Convert.ToString(obj));
+            }
+
+            return builder.ToString();
         }
 
     }

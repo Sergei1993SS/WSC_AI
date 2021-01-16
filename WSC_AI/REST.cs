@@ -90,7 +90,7 @@ namespace WSC_AI
             var defectMessage = new DefectMessage();
             defectMessage.ModelId = model;
             defectMessage.TotalDefects = Main_Form.defect_out.Count;
-            for (var i = 0; i < Main_Form.defect_out.Count; i++)
+            for (var i = start; i < end && i < Main_Form.defect_out.Count; i++)
             {
 
                 defectMessage.Defects.Add(Main_Form.defect_out[i]);
@@ -98,7 +98,10 @@ namespace WSC_AI
             }
 
             string jsonString = JsonSerializer.Serialize(defectMessage);
+            Main_Form.REST_RUN = true;
             await context.Response.SendResponseAsync(jsonString);
         }
+
+        
     }
 }

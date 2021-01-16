@@ -21,6 +21,7 @@ namespace WSC_AI
         public int SleepProcessImage = 1000;
         public volatile bool OPC_Connecting;
         public volatile int INDEX_DEFECT = 0;
+        public bool ERR_CONNECT = false;
 
         public double GPU_memory_Presence_Weld = 0.1;
         public double GPU_memory_Defects_Weld = 0.9;
