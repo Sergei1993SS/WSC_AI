@@ -357,7 +357,6 @@ namespace WSC_AI
         {
             NDArray network_out = this.Session_Presence_Weld.run(this.output_operation_Presence_Weld.outputs[0], new FeedItem(this.input_operation_Presence_Weld.outputs[0], arr));
             network_out = np.round_(network_out[0]);
-            Session_Presence_Weld.close();
 
             if (network_out[0] == 1)
             {
