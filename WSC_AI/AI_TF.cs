@@ -347,10 +347,11 @@ namespace WSC_AI
         }
 
 
-        public void weld_defects(NDArray arr)
+        public NDArray weld_defects(NDArray arr)
         {
             NDArray network_out = this.Session_Defects_Weld.run(this.output_operation_Defects_Weld.outputs[0], new FeedItem(this.input_operation_Defects_Weld.outputs[0], arr));
             network_out = np.round_(network_out[0]);
+            return network_out;
         }
 
         public bool weld_in_place(NDArray arr)
@@ -364,6 +365,8 @@ namespace WSC_AI
             }
             else return false;
         }
+
+        
 
     }
 }

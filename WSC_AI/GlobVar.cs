@@ -1,6 +1,7 @@
 ﻿using System;
 using Basler.Pylon;
 using OpenCvSharp;
+using System.Collections.Generic;
 
 
 namespace WSC_AI
@@ -29,6 +30,12 @@ namespace WSC_AI
         public Size size_weld_defect = new Size(1748, 1348);
         public Size size_weld_presence = new Size(612, 512);
         public Size image2base = new Size(612, 512);
+        public Dictionary<int, String> DICTIONARY_DEFECTS = new Dictionary<int, string> { 
+            { 0, "Шлак" },
+            { 1, "Прожог или Поры или свищ" },
+            { 2, "Брызги металла"},
+            { 3, "Кратер"},
+            { 4, "Раковина"}};
     }
 
     struct TScan_and_Images

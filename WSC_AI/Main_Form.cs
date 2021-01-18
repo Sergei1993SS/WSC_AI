@@ -160,27 +160,54 @@ namespace WSC_AI
             {
                 if (OPC_client.OPC_Connecting)
                 {
-                    this.Invoke(new MethodInvoker(() =>
+                    try
                     {
-                        pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.green;
-                        pictureBox_opc.Refresh();
-                    }));
+                        this.Invoke(new MethodInvoker(() =>
+                        {
+                            pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.green;
+                            pictureBox_opc.Refresh();
+                        }));
+                    }
+                    catch (Exception)
+                    {
+
+                        
+                    }
+                    
                 }
                 else
                 {
-                    this.Invoke(new MethodInvoker(() =>
+                    try
                     {
-                        pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.red;
-                        pictureBox_opc.Refresh();
-                    }));
+                        this.Invoke(new MethodInvoker(() =>
+                        {
+                            pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.red;
+                            pictureBox_opc.Refresh();
+                        }));
+                    }
+                    catch (Exception)
+                    {
+
+                        
+                    }
+                    
                 }
                 
                 Thread.Sleep(600);
-                this.Invoke(new MethodInvoker(() =>
+                try
                 {
-                    pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.gray;
-                    pictureBox_opc.Refresh();
-                }));
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        pictureBox_opc.BackgroundImage = WSC_AI.Properties.Resources.gray;
+                        pictureBox_opc.Refresh();
+                    }));
+                }
+                catch (Exception)
+                {
+
+                    
+                }
+                
                 Thread.Sleep(600);
             }
         }
@@ -191,27 +218,54 @@ namespace WSC_AI
             {
                 if (REST_RUN)
                 {
-                    this.Invoke(new MethodInvoker(() =>
+                    try
                     {
-                        pictureBox_REST.BackgroundImage = Properties.Resources.green;
-                        pictureBox_REST.Refresh();
-                    }));
+                        this.Invoke(new MethodInvoker(() =>
+                        {
+                            pictureBox_REST.BackgroundImage = Properties.Resources.green;
+                            pictureBox_REST.Refresh();
+                        }));
+                    }
+                    catch (Exception)
+                    {
+
+                        
+                    }
+                    
                 }
                 else
                 {
-                    this.Invoke(new MethodInvoker(() =>
+                    try
                     {
-                        pictureBox_REST.BackgroundImage = Properties.Resources.red;
-                        pictureBox_REST.Refresh();
-                    }));
+                        this.Invoke(new MethodInvoker(() =>
+                        {
+                            pictureBox_REST.BackgroundImage = Properties.Resources.red;
+                            pictureBox_REST.Refresh();
+                        }));
+                    }
+                    catch (Exception)
+                    {
+
+                        
+                    }
+                    
                 }
 
                 Thread.Sleep(600);
-                this.Invoke(new MethodInvoker(() =>
+                try
                 {
-                    pictureBox_REST.BackgroundImage = WSC_AI.Properties.Resources.gray;
-                    pictureBox_opc.Refresh();
-                }));
+                    this.Invoke(new MethodInvoker(() =>
+                    {
+                        pictureBox_REST.BackgroundImage = WSC_AI.Properties.Resources.gray;
+                        pictureBox_opc.Refresh();
+                    }));
+                }
+                catch (Exception)
+                {
+
+                  
+                }
+                
                 Thread.Sleep(600);
             }
         }
@@ -236,11 +290,80 @@ namespace WSC_AI
 
                         if (AI.weld_in_place(arr_weld))
                         {
-                            ///////
+                            arr_weld = AI.load_vol(image, AI.size_weld_defect);
+                            NDArray res = AI.weld_defects(arr_weld);
+
+                            if (res.max() == 1)
+                            {
+                                var defectCoordinates = new DefectCoordinates();
+                                /*double a = sample.Rx * (Math.PI / 180);
+                                double b = sample.Ry * (Math.PI / 180);
+                                double c = sample.Rz * (Math.PI / 180);
+
+                                double dy1 = Math.Cos(a) * sample.Y + Math.Sin(a) * sample.Z;
+                                double dz1 = -Math.Sin(a) * sample.Y + Math.Cos(a) * sample.Z;
+
+                                double dx1 = Math.Cos(b) * sample.X - Math.Sin(b) * dz1;
+                                double dz2 = Math.Sin(b) * sample.X + Math.Cos(b) * dz1;
+
+                                double dx2 = Math.Cos(c) * dx1 + Math.Sin(c) * dy1;
+                                double dy2 = -Math.Sin(c) * dx1 + Math.Cos(c) * dy1;*/
+
+                                
+                                defectCoordinates.X = sample.X;
+                                defectCoordinates.Y = sample.Y;
+                                defectCoordinates.Z = sample.Z;
+                                defectCoordinates.Xr = sample.Rx;
+                                defectCoordinates.Yr = sample.Ry;
+                                defectCoordinates.Zr = sample.Rz;
+
+                                var defect = new Defect();
+                                defect.DefectId = AI.INDEX_DEFECT;
+                                defect.DefectCoordinates = defectCoordinates;
+
+                                for (int i = 0; i < res.Shape[0]; i++)
+                                {
+                                    if (res[i] == 1)
+                                    {
+
+                                        string find_defect;
+                                        bool result_find = AI.DICTIONARY_DEFECTS.TryGetValue(i, out find_defect);
+                                        if (result_find)
+                                        {
+                                            defect.Descriptions.Add(find_defect);
+                                        }
+                                    }
+
+                                }
+
+                                Mat To_Base = new Mat();
+                                Cv2.Resize(image, To_Base, AI.image2base);
+                                Cv2.CvtColor(To_Base, To_Base, ColorConversionCodes.BGR2RGB);
+
+                                defect.ImageBase64 = Base64Image.Base64Encode(To_Base);
+
+                                defects.Enqueue(defect);
+                                AI.INDEX_DEFECT++;
+
+                            }
+                            
                         }
                         else
                         {
                             
+                            /*double a = sample.Rx * (Math.PI/180);
+                            double b = sample.Ry * (Math.PI / 180);
+                            double c = sample.Rz * (Math.PI / 180);
+
+                            double dy1 = Math.Cos(a) * sample.Y + Math.Sin(a) * sample.Z;
+                            double dz1 = -Math.Sin(a) * sample.Y + Math.Cos(a) * sample.Z;
+
+                            double dx1 = Math.Cos(b) * sample.X - Math.Sin(b) * dz1;
+                            double dz2 = Math.Sin(b) * sample.X + Math.Cos(b) * dz1;
+
+                            double dx2 = Math.Cos(c) * dx1 + Math.Sin(c) * dy1;
+                            double dy2 = -Math.Sin(c) * dx1 + Math.Cos(c) * dy1;*/
+
                             var defectCoordinates = new DefectCoordinates();
                             defectCoordinates.X = sample.X;
                             defectCoordinates.Y = sample.Y;
@@ -256,6 +379,7 @@ namespace WSC_AI
 
                             Mat To_Base = new Mat();
                             Cv2.Resize(image, To_Base, AI.image2base);
+                            Cv2.CvtColor(To_Base, To_Base, ColorConversionCodes.BGR2RGB);
 
                             defect.ImageBase64 = Base64Image.Base64Encode(To_Base);
                             
@@ -263,8 +387,7 @@ namespace WSC_AI
                             AI.INDEX_DEFECT++; 
                         }
 
-                        //arr_weld = AI.load_vol(image, AI.size_weld_defect);
-                        //AI.weld_defects(arr_weld);*/
+                        
 
                         GC.Collect();
 
@@ -362,7 +485,7 @@ namespace WSC_AI
         {
             string code = UniqueMachineId();
 
-            if (code!= "LENOVO:PF10F6F2") //"LENOVO:PF10F6F2"
+            if (code!= "LENOVO:PF10F6F2" && code != "American Megatrends Inc.:Default string") //"LENOVO:PF10F6F2"
             {
                 DialogResult res = MessageBox.Show(caption: "Ошибка доступа",
                         text: "ПО не предназначено для работы на этом ПК." + System.Environment.NewLine + "Обратитесь за поддержкой к разработчику: sergei.sisyukin@gmail.com",
