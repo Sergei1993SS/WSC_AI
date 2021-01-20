@@ -296,23 +296,42 @@ namespace WSC_AI
                             if (res.max() == 1)
                             {
                                 var defectCoordinates = new DefectCoordinates();
-                                /*double a = sample.Rx * (Math.PI / 180);
+                                double a = sample.Rx * (Math.PI / 180);
                                 double b = sample.Ry * (Math.PI / 180);
                                 double c = sample.Rz * (Math.PI / 180);
 
-                                double dy1 = Math.Cos(a) * sample.Y + Math.Sin(a) * sample.Z;
-                                double dz1 = -Math.Sin(a) * sample.Y + Math.Cos(a) * sample.Z;
+                                NDArray Rx = np.array(new double[,] {
+                                { 1, 0, 0, 0 },
+                                { 0, Math.Cos(a), -Math.Sin(a), 0},
+                                { 0, Math.Sin(a), Math.Cos(a), 0},
+                                { 0, 0, 0, 1 }
+                            });
 
-                                double dx1 = Math.Cos(b) * sample.X - Math.Sin(b) * dz1;
-                                double dz2 = Math.Sin(b) * sample.X + Math.Cos(b) * dz1;
+                                NDArray Ry = np.array(new double[,] {
+                                { Math.Cos(b), 0, Math.Sin(b), 0 },
+                                { 0, 1, 0, 0},
+                                { -Math.Sin(b), 0, Math.Cos(b), 0},
+                                { 0, 0, 0, 1 }
+                            });
 
-                                double dx2 = Math.Cos(c) * dx1 + Math.Sin(c) * dy1;
-                                double dy2 = -Math.Sin(c) * dx1 + Math.Cos(c) * dy1;*/
+                                NDArray Rz = np.array(new double[,] {
+                                { Math.Cos(c), -Math.Sin(c), 0, 0 },
+                                { Math.Sin(c), Math.Cos(c), 0, 0},
+                                { 0, 0, 1, 0},
+                                { 0, 0, 0, 1 }
+                            });
 
-                                
-                                defectCoordinates.X = sample.X;
-                                defectCoordinates.Y = sample.Y;
-                                defectCoordinates.Z = sample.Z;
+                                NDArray V = np.array(new double[,] { { sample.X }, { sample.Y }, { sample.Z }, { 1 } });
+
+                                NDArray M = np.matmul(Rx, Ry);
+                                M = np.matmul(M, Rz);
+
+                                NDArray new_V = np.matmul(M, V);
+
+
+                                defectCoordinates.X = new_V[0][0];
+                                defectCoordinates.Y = new_V[1][0];
+                                defectCoordinates.Z = new_V[2][0];
                                 defectCoordinates.Xr = sample.Rx;
                                 defectCoordinates.Yr = sample.Ry;
                                 defectCoordinates.Zr = sample.Rz;
@@ -351,23 +370,45 @@ namespace WSC_AI
                         else
                         {
                             
-                            /*double a = sample.Rx * (Math.PI/180);
+                            
+
+                            var defectCoordinates = new DefectCoordinates();
+                            double a = sample.Rx * (Math.PI / 180);
                             double b = sample.Ry * (Math.PI / 180);
                             double c = sample.Rz * (Math.PI / 180);
 
-                            double dy1 = Math.Cos(a) * sample.Y + Math.Sin(a) * sample.Z;
-                            double dz1 = -Math.Sin(a) * sample.Y + Math.Cos(a) * sample.Z;
+                            NDArray Rx = np.array(new double[,] { 
+                                { 1, 0, 0, 0 },
+                                { 0, Math.Cos(a), -Math.Sin(a), 0},
+                                { 0, Math.Sin(a), Math.Cos(a), 0},
+                                { 0, 0, 0, 1 }
+                            });
 
-                            double dx1 = Math.Cos(b) * sample.X - Math.Sin(b) * dz1;
-                            double dz2 = Math.Sin(b) * sample.X + Math.Cos(b) * dz1;
+                            NDArray Ry = np.array(new double[,] {
+                                { Math.Cos(b), 0, Math.Sin(b), 0 },
+                                { 0, 1, 0, 0},
+                                { -Math.Sin(b), 0, Math.Cos(b), 0},
+                                { 0, 0, 0, 1 }
+                            });
 
-                            double dx2 = Math.Cos(c) * dx1 + Math.Sin(c) * dy1;
-                            double dy2 = -Math.Sin(c) * dx1 + Math.Cos(c) * dy1;*/
+                            NDArray Rz = np.array(new double[,] {
+                                { Math.Cos(c), -Math.Sin(c), 0, 0 },
+                                { Math.Sin(c), Math.Cos(c), 0, 0},
+                                { 0, 0, 1, 0},
+                                { 0, 0, 0, 1 }
+                            });
 
-                            var defectCoordinates = new DefectCoordinates();
-                            defectCoordinates.X = sample.X;
-                            defectCoordinates.Y = sample.Y;
-                            defectCoordinates.Z = sample.Z;
+                            NDArray V = np.array(new double[,] { {sample.X }, { sample.Y }, { sample.Z }, { 1 } });
+
+                            NDArray M = np.matmul(Rx, Ry);
+                            M = np.matmul(M, Rz);
+
+                            NDArray new_V = np.matmul(M, V);
+
+
+                            defectCoordinates.X = new_V[0][0];
+                            defectCoordinates.Y = new_V[1][0];
+                            defectCoordinates.Z = new_V[2][0];
                             defectCoordinates.Xr = sample.Rx;
                             defectCoordinates.Yr = sample.Ry;
                             defectCoordinates.Zr = sample.Rz;
