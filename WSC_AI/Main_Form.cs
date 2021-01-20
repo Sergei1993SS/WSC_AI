@@ -288,7 +288,8 @@ namespace WSC_AI
 
                         NDArray arr_weld = AI.load_vol(image, AI.size_weld_presence);
 
-                        if (AI.weld_in_place(arr_weld))
+                        bool find_place = AI.weld_in_place(arr_weld);
+                        if (find_place)
                         {
                             arr_weld = AI.load_vol(image, AI.size_weld_defect);
                             NDArray res = AI.weld_defects(arr_weld);
@@ -357,7 +358,7 @@ namespace WSC_AI
 
                                 Mat To_Base = new Mat();
                                 Cv2.Resize(image, To_Base, AI.image2base);
-                                Cv2.CvtColor(To_Base, To_Base, ColorConversionCodes.BGR2RGB);
+                                //Cv2.CvtColor(To_Base, To_Base, ColorConversionCodes.BGR2RGB);
 
                                 defect.ImageBase64 = Base64Image.Base64Encode(To_Base);
 
@@ -420,7 +421,7 @@ namespace WSC_AI
 
                             Mat To_Base = new Mat();
                             Cv2.Resize(image, To_Base, AI.image2base);
-                            Cv2.CvtColor(To_Base, To_Base, ColorConversionCodes.BGR2RGB);
+                            //Cv2.CvtColor(To_Base, To_Base, ColorConversionCodes.BGR2RGB);
 
                             defect.ImageBase64 = Base64Image.Base64Encode(To_Base);
                             

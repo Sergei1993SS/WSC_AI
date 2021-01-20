@@ -331,14 +331,16 @@ namespace WSC_AI
 
         public NDArray load_vol(Mat img, Size size)
         {
-            Cv2.Resize(img, img, size);
-            Cv2.CvtColor(img, img, ColorConversionCodes.BGR2RGB);
-            Mat newimg = img.Reshape(1);
-            byte[] imageArray = new byte[img.Height * img.Width * 3];
+            Mat Image = new Mat();
+            img.CopyTo(Image);
+            Cv2.Resize(Image, Image, size);
+            Cv2.CvtColor(Image, Image, ColorConversionCodes.BGR2RGB);
+            Mat newimg = Image.Reshape(1);
+            byte[] imageArray = new byte[Image.Height * Image.Width * 3];
 
             newimg.GetArray(0, 0, imageArray);
             NDArray Res = np.array(imageArray);
-            Res = Res.reshape(new Shape(img.Height, img.Width, 3));
+            Res = Res.reshape(new Shape(Image.Height, Image.Width, 3));
 
             Res = np.divide(Res, 255.0);
             Res = np.expand_dims(Res, axis: 0);
