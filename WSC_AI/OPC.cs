@@ -13,9 +13,9 @@ namespace WSC_AI
         {
         connect_opc:
             Client = new OpcClient(Server_Name);
-            Client.DisconnectTimeout = 1000;
-            Client.SessionTimeout = 2147483647;  //2147483647     
-            Client.ReconnectTimeout = 20;
+            //Client.DisconnectTimeout = 1000;
+            //Client.SessionTimeout = 2147483647;  //2147483647     
+            //Client.ReconnectTimeout = 20;
             
 
             try
@@ -73,6 +73,38 @@ namespace WSC_AI
                 catch (Exception)
                 {
                     log = new LogWriter("Ошибка разрыва: " + Client.State.ToString());
+
+                    try
+                    {
+                        log = new LogWriter("Удаляем клиента ");
+                        Client.Dispose();
+
+                        log = new LogWriter("Создаем нового ");
+                        Client = new OpcClient(Server_Name);
+                        //Client.DisconnectTimeout = 1000;
+                        //Client.SessionTimeout = 2147483647;  //2147483647     
+                        //Client.ReconnectTimeout = 20;
+
+                        try
+                        {
+                            log = new LogWriter("Соединяем " + Client.State.ToString());
+                            Client.Connect();
+                        }
+                        catch (Exception)
+                        {
+                            log = new LogWriter("Неудчная попытка соеденения " + Client.State.ToString());
+
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        
+                    }
+                    
+
+                    
+
                 }
 
                 Reconnect();
