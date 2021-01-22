@@ -4,13 +4,13 @@ using System.Threading;
 using System.Collections.Concurrent;
 using System.IO;
 using OpenCvSharp;
-using NumSharp;
 using Basler.Pylon;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using DefectMessageNamespace;
 using System.Management;
 using System.Text;
+using NumSharp;
 
 
 namespace WSC_AI
@@ -286,13 +286,13 @@ namespace WSC_AI
 
                         SaveImage(image, sample.GrabImage.Timestamp.ToString());
 
-                        NDArray arr_weld = AI.load_vol(image, AI.size_weld_presence);
+                        NumSharp.NDArray arr_weld = AI.load_vol(image, AI.size_weld_presence);
 
                         bool find_place = AI.weld_in_place(arr_weld);
                         if (find_place)
                         {
                             arr_weld = AI.load_vol(image, AI.size_weld_defect);
-                            NDArray res = AI.weld_defects(arr_weld);
+                            NumSharp.NDArray res = AI.weld_defects(arr_weld);
 
                             if (res.max() == 1)
                             {
@@ -301,34 +301,40 @@ namespace WSC_AI
                                 double b = sample.Ry * (Math.PI / 180);
                                 double c = sample.Rz * (Math.PI / 180);
 
-                                NDArray Rx = np.array(new double[,] {
+                                
+
+                                NDArray Rx = np.array<double>(new double[,] {
                                 { 1, 0, 0, 0 },
                                 { 0, Math.Cos(a), -Math.Sin(a), 0},
                                 { 0, Math.Sin(a), Math.Cos(a), 0},
                                 { 0, 0, 0, 1 }
                             });
 
-                                NDArray Ry = np.array(new double[,] {
+                                NDArray Ry = np.array<double>(new double[,] {
                                 { Math.Cos(b), 0, Math.Sin(b), 0 },
                                 { 0, 1, 0, 0},
                                 { -Math.Sin(b), 0, Math.Cos(b), 0},
                                 { 0, 0, 0, 1 }
                             });
 
-                                NDArray Rz = np.array(new double[,] {
+                                NDArray Rz = np.array<double>(new double[,] {
                                 { Math.Cos(c), -Math.Sin(c), 0, 0 },
                                 { Math.Sin(c), Math.Cos(c), 0, 0},
                                 { 0, 0, 1, 0},
                                 { 0, 0, 0, 1 }
                             });
 
+
+
                                 NDArray V = np.array(new double[,] { { sample.X }, { sample.Y }, { sample.Z }, { 1 } });
 
+
+
                                 NDArray M = np.matmul(Rx, Ry);
+
+
                                 M = np.matmul(M, Rz);
-
                                 NDArray new_V = np.matmul(M, V);
-
 
                                 defectCoordinates.X = new_V[0][0];
                                 defectCoordinates.Y = new_V[1][0];
@@ -378,7 +384,7 @@ namespace WSC_AI
                             double b = sample.Ry * (Math.PI / 180);
                             double c = sample.Rz * (Math.PI / 180);
 
-                            NDArray Rx = np.array(new double[,] { 
+                            NDArray Rx = np.array(new double[,] {
                                 { 1, 0, 0, 0 },
                                 { 0, Math.Cos(a), -Math.Sin(a), 0},
                                 { 0, Math.Sin(a), Math.Cos(a), 0},
@@ -399,11 +405,17 @@ namespace WSC_AI
                                 { 0, 0, 0, 1 }
                             });
 
-                            NDArray V = np.array(new double[,] { {sample.X }, { sample.Y }, { sample.Z }, { 1 } });
+
+                            ////////////////////////////////////
+
+                            NDArray V = np.array(new double[,] { {sample.X}, { sample.Y }, { sample.Z }, { 1 } });
+
+
 
                             NDArray M = np.matmul(Rx, Ry);
-                            M = np.matmul(M, Rz);
 
+
+                            M = np.matmul(M, Rz);
                             NDArray new_V = np.matmul(M, V);
 
 
@@ -449,12 +461,14 @@ namespace WSC_AI
             
         }
 
-        /// <summary>
-        /// ПЕРЕД ЗАКРЫТИЕМ ФОРМЫ
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Main_Form_FormClosing(object sender, FormClosingEventArgs e)
+    
+
+    /// <summary>
+    /// ПЕРЕД ЗАКРЫТИЕМ ФОРМЫ
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void Main_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!AI.ERR_CONNECT)
             {

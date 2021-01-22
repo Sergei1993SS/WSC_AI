@@ -258,8 +258,8 @@
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NumSharp.Lite, Version=0.1.10.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\NumSharp.Lite.0.1.10\lib\netstandard2.0\NumSharp.Lite.dll</HintPath>
+    <Reference Include="NumSharp.Lite, Version=0.1.11.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\NumSharp.Lite.0.1.11\lib\netstandard2.0\NumSharp.Lite.dll</HintPath>
     </Reference>
     <Reference Include="Opc.UaFx.Advanced, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0220af0d33d50236, processorArchitecture=MSIL">
       <HintPath>..\packages\Opc.UaFx.Advanced.2.11.5\lib\net471\Opc.UaFx.Advanced.dll</HintPath>
@@ -470,7 +470,6 @@
     <None Include="Resources\green.png" />
     <None Include="Resources\red.png" />
     <None Include="Resources\red.bmp" />
-    <None Include="Resources\small_model_classifier_weld_96_99.h5" />
     <None Include="Resources\tick.png" />
     <None Include="Resources\cross.png" />
   </ItemGroup>

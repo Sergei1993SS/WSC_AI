@@ -12,7 +12,8 @@ namespace WSC_AI
         public OPC()
         {
         connect_opc:
-            Client = new OpcClient(Server_Name);
+            Client = new OpcClient(Server_Name, new Opc.UaFx.OpcSecurityPolicy(Opc.UaFx.OpcSecurityMode.None));
+            
             //Client.DisconnectTimeout = 1000;
             //Client.SessionTimeout = 2147483647;  //2147483647     
             //Client.ReconnectTimeout = 20;
