@@ -18,7 +18,7 @@ namespace WSC_AI
         public String Server_Name= "opc.tcp://127.0.0.1:4334";
 
         public String ImageSavePath = "D:\\Images";
-        public int SleepProcessCam = 200;
+        public int SleepProcessCam = 500;
         public int SleepProcessImage = 1000;
         public volatile bool OPC_Connecting;
         public volatile int INDEX_DEFECT = 0;
