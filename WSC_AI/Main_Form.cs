@@ -301,32 +301,31 @@ namespace WSC_AI
                                 double b = sample.Ry * (Math.PI / 180);
                                 double c = sample.Rz * (Math.PI / 180);
 
-                                
-
-                                NDArray Rx = np.array<double>(new double[,] {
-                                { 1, 0, 0, 0 },
-                                { 0, Math.Cos(a), -Math.Sin(a), 0},
-                                { 0, Math.Sin(a), Math.Cos(a), 0},
-                                { 0, 0, 0, 1 }
+                                NDArray Rx = np.array(new double[,] {
+                                { 1, 0, 0 },
+                                { 0, Math.Cos(a), -Math.Sin(a)},
+                                { 0, Math.Sin(a), Math.Cos(a)},
+                                //{ 0, 0, 0, 1 }
                             });
 
-                                NDArray Ry = np.array<double>(new double[,] {
-                                { Math.Cos(b), 0, Math.Sin(b), 0 },
-                                { 0, 1, 0, 0},
-                                { -Math.Sin(b), 0, Math.Cos(b), 0},
-                                { 0, 0, 0, 1 }
+                                NDArray Ry = np.array(new double[,] {
+                                { Math.Cos(b), 0, Math.Sin(b) },
+                                { 0, 1, 0},
+                                { -Math.Sin(b), 0, Math.Cos(b)},
+                                //{ 0, 0, 0, 1 }
                             });
 
-                                NDArray Rz = np.array<double>(new double[,] {
-                                { Math.Cos(c), -Math.Sin(c), 0, 0 },
-                                { Math.Sin(c), Math.Cos(c), 0, 0},
-                                { 0, 0, 1, 0},
-                                { 0, 0, 0, 1 }
+                                NDArray Rz = np.array(new double[,] {
+                                { Math.Cos(c), -Math.Sin(c), 0 },
+                                { Math.Sin(c), Math.Cos(c), 0},
+                                { 0, 0, 1},
+                                //{ 0, 0, 0, 1 }
                             });
 
 
+                                ////////////////////////////////////
 
-                                NDArray V = np.array(new double[,] { { sample.X }, { sample.Y }, { sample.Z }, { 1 } });
+                                NDArray V = np.array(new double[,] { { sample.X }, { sample.Y }, { sample.Z } });//, { 1 }
 
 
 
@@ -335,6 +334,7 @@ namespace WSC_AI
 
                                 M = np.matmul(M, Rz);
                                 NDArray new_V = np.matmul(M, V);
+
 
                                 defectCoordinates.X = new_V[0][0];
                                 defectCoordinates.Y = new_V[1][0];
@@ -385,30 +385,30 @@ namespace WSC_AI
                             double c = sample.Rz * (Math.PI / 180);
 
                             NDArray Rx = np.array(new double[,] {
-                                { 1, 0, 0, 0 },
-                                { 0, Math.Cos(a), -Math.Sin(a), 0},
-                                { 0, Math.Sin(a), Math.Cos(a), 0},
-                                { 0, 0, 0, 1 }
+                                { 1, 0, 0 },
+                                { 0, Math.Cos(a), -Math.Sin(a)},
+                                { 0, Math.Sin(a), Math.Cos(a)},
+                                //{ 0, 0, 0, 1 }
                             });
 
                             NDArray Ry = np.array(new double[,] {
-                                { Math.Cos(b), 0, Math.Sin(b), 0 },
-                                { 0, 1, 0, 0},
-                                { -Math.Sin(b), 0, Math.Cos(b), 0},
-                                { 0, 0, 0, 1 }
+                                { Math.Cos(b), 0, Math.Sin(b) },
+                                { 0, 1, 0},
+                                { -Math.Sin(b), 0, Math.Cos(b)},
+                                //{ 0, 0, 0, 1 }
                             });
 
                             NDArray Rz = np.array(new double[,] {
-                                { Math.Cos(c), -Math.Sin(c), 0, 0 },
-                                { Math.Sin(c), Math.Cos(c), 0, 0},
-                                { 0, 0, 1, 0},
-                                { 0, 0, 0, 1 }
+                                { Math.Cos(c), -Math.Sin(c), 0 },
+                                { Math.Sin(c), Math.Cos(c), 0},
+                                { 0, 0, 1},
+                                //{ 0, 0, 0, 1 }
                             });
 
 
                             ////////////////////////////////////
 
-                            NDArray V = np.array(new double[,] { {sample.X}, { sample.Y }, { sample.Z }, { 1 } });
+                            NDArray V = np.array(new double[,] { {sample.X}, { sample.Y }, { sample.Z } });//, { 1 }
 
 
 
