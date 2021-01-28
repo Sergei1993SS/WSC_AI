@@ -30,12 +30,16 @@ namespace WSC_AI
         public Size size_weld_defect = new Size(1748, 1348);
         public Size size_weld_presence = new Size(612, 512);
         public Size image2base = new Size(612, 512);
+
+
+        public float threshold_weld = 0.3f;
+        public float threshold_defect = 0.7f;
+
         public Dictionary<int, String> DICTIONARY_DEFECTS = new Dictionary<int, string> { 
             { 0, "Шлак" },
             { 1, "Прожог или Поры или свищ" },
             { 2, "Брызги металла"},
-            { 3, "Кратер"},
-            { 4, "Раковина"}};
+            { 3, "Кратер или раковина"}};
     }
 
     struct TScan_and_Images

@@ -349,19 +349,18 @@ namespace WSC_AI
         }
 
 
-        public NumSharp.NDArray weld_defects(NumSharp.NDArray arr)
+        public NDArray weld_defects(NumSharp.NDArray arr)
         {
             NumSharp.NDArray network_out = this.Session_Defects_Weld.run(this.output_operation_Defects_Weld.outputs[0], new FeedItem(this.input_operation_Defects_Weld.outputs[0], arr));
-            network_out = np.round_(network_out[0]);
-            return network_out;
+            return network_out[0];
         }
 
         public bool weld_in_place(NDArray arr)
         {
             NumSharp.NDArray network_out = this.Session_Presence_Weld.run(this.output_operation_Presence_Weld.outputs[0], new FeedItem(this.input_operation_Presence_Weld.outputs[0], arr));
-            network_out = np.round_(network_out[0]);
+            float score = (float)network_out[0][0];
 
-            if (network_out[0] == 1)
+            if (score > threshold_weld)
             {
                 return true;
             }

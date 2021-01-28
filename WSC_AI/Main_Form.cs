@@ -130,6 +130,14 @@ namespace WSC_AI
         {
             while (true)
             {
+                if (OPC_client.GetisCameraVideoReady())
+                {
+                    defects = new ConcurrentQueue<Defect>();
+                    defect_out.Clear();
+                    AI.INDEX_DEFECT = 0;
+                    
+                    OPC_client.SetnisCameraVideoReadyFalse();
+                }
                 if (OPC_client.GetnisCameraInPosition())
                 {
 
@@ -292,9 +300,9 @@ namespace WSC_AI
                         if (find_place)
                         {
                             arr_weld = AI.load_vol(image, AI.size_weld_defect);
-                            NumSharp.NDArray res = AI.weld_defects(arr_weld);
+                            NDArray res = AI.weld_defects(arr_weld);
 
-                            if (res.max() == 1)
+                            if ((float)res.max() > AI.threshold_defect) ///////////ПРОВЕРИТЬ
                             {
                                 var defectCoordinates = new DefectCoordinates();
                                 double a = sample.Rx * (Math.PI / 180);
@@ -349,7 +357,7 @@ namespace WSC_AI
 
                                 for (int i = 0; i < res.Shape[0]; i++)
                                 {
-                                    if (res[i] == 1)
+                                    if (res[i] > AI.threshold_defect)
                                     {
 
                                         string find_defect;
