@@ -61,6 +61,10 @@ namespace WSC_AI
                 Defect result;
                 if (Main_Form.defects.TryDequeue(out result))
                 {
+                    if (Main_Form.defect_out.Count>0)
+                    {
+
+                    }
                     Main_Form.defect_out.Add(result);
                 }
             }

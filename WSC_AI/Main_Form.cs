@@ -25,14 +25,15 @@ namespace WSC_AI
         static public ConcurrentQueue<Defect> defects = new ConcurrentQueue<Defect>();
         static public List<Defect> defect_out = new List<Defect>();
         static public volatile bool REST_RUN;
+        public volatile String TIME_FOLDER;
 
         /// <summary>
         /// 
         /// </summary>
         public Main_Form()
         {
-            
 
+            TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
             cap = new Capture();
             cap.SetConfig();
             OPC_client = new OPC();
@@ -135,7 +136,7 @@ namespace WSC_AI
                     defects = new ConcurrentQueue<Defect>();
                     defect_out.Clear();
                     AI.INDEX_DEFECT = 0;
-                    
+                    TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
                     OPC_client.SetnisCameraVideoReadyFalse();
                 }
                 if (OPC_client.GetnisCameraInPosition())
@@ -294,15 +295,18 @@ namespace WSC_AI
 
                         SaveImage(image, sample.GrabImage.Timestamp.ToString());
 
-                        NumSharp.NDArray arr_weld = AI.load_vol(image, AI.size_weld_presence);
+                        NDArray arr_weld = AI.load_vol(image, AI.size_weld_presence);
 
                         bool find_place = AI.weld_in_place(arr_weld);
                         if (find_place)
                         {
                             arr_weld = AI.load_vol(image, AI.size_weld_defect);
-                            NDArray res = AI.weld_defects(arr_weld);
 
-                            if ((float)res.max() > AI.threshold_defect) ///////////ПРОВЕРИТЬ
+                            NDArray res = AI.weld_defects(arr_weld);
+                            String slice = "0:" + Convert.ToString(res.Shape[0] - 1);
+                            
+
+                            if ((float)res[slice].max() > AI.threshold_defect && (float)res[res.Shape[0] - 1]<0.5) ///////////ПРОВЕРИТЬ
                             {
                                 var defectCoordinates = new DefectCoordinates();
                                 double a = sample.Rx * (Math.PI / 180);
@@ -355,7 +359,7 @@ namespace WSC_AI
                                 defect.DefectId = AI.INDEX_DEFECT;
                                 defect.DefectCoordinates = defectCoordinates;
 
-                                for (int i = 0; i < res.Shape[0]; i++)
+                                for (int i = 0; i < res.Shape[0] - 1; i++)
                                 {
                                     if (res[i] > AI.threshold_defect)
                                     {
@@ -378,6 +382,7 @@ namespace WSC_AI
 
                                 defects.Enqueue(defect);
                                 AI.INDEX_DEFECT++;
+
 
                             }
                             
@@ -514,7 +519,7 @@ namespace WSC_AI
 
         private void SaveImage(Mat img, String Timestamp)
         {
-            String m_exePath = cap.ImageSavePath + "//" + DateTime.Now.ToShortDateString();
+            String m_exePath = cap.ImageSavePath + "//" + DateTime.Now.ToShortDateString()+"_"+ TIME_FOLDER;
             String img_path = m_exePath + "//" + Timestamp + ".jpg";
 
             if (Directory.Exists(m_exePath))
