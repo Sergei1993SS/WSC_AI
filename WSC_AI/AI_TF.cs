@@ -329,7 +329,7 @@ namespace WSC_AI
             return Res;
         }
 
-        public NumSharp.NDArray load_vol(Mat img, Size size)
+        public NDArray load_vol(Mat img, Size size)
         {
             Mat Image = new Mat();
             img.CopyTo(Image);
@@ -339,7 +339,7 @@ namespace WSC_AI
             byte[] imageArray = new byte[Image.Height * Image.Width * 3];
 
             newimg.GetArray(0, 0, imageArray);
-            NumSharp.NDArray Res = np.array(imageArray);
+            NDArray Res = np.array(imageArray);
             Res = Res.reshape(new Shape(Image.Height, Image.Width, 3));
 
             Res = np.divide(Res, 255.0);
@@ -349,15 +349,15 @@ namespace WSC_AI
         }
 
 
-        public NDArray weld_defects(NumSharp.NDArray arr)
+        public NDArray weld_defects(NDArray arr)
         {
-            NumSharp.NDArray network_out = this.Session_Defects_Weld.run(this.output_operation_Defects_Weld.outputs[0], new FeedItem(this.input_operation_Defects_Weld.outputs[0], arr));
+            NDArray network_out = this.Session_Defects_Weld.run(this.output_operation_Defects_Weld.outputs[0], new FeedItem(this.input_operation_Defects_Weld.outputs[0], arr));
             return network_out[0];
         }
 
         public bool weld_in_place(NDArray arr)
         {
-            NumSharp.NDArray network_out = this.Session_Presence_Weld.run(this.output_operation_Presence_Weld.outputs[0], new FeedItem(this.input_operation_Presence_Weld.outputs[0], arr));
+            NDArray network_out = this.Session_Presence_Weld.run(this.output_operation_Presence_Weld.outputs[0], new FeedItem(this.input_operation_Presence_Weld.outputs[0], arr));
             float score = (float)network_out[0][0];
 
             if (score > threshold_weld)
