@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using DefectMessageNamespace;
 using System.Text.Json;
+using OpenCvSharp;
 
 
 namespace WSC_AI
@@ -47,6 +48,22 @@ namespace WSC_AI
             }
         }
 
+        public double lengh_S(double X1, double Y1, double Z1, double X2, double Y2, double Z2)
+        {
+            double S = Math.Sqrt(Math.Pow(X1 - X2, 2.0) + Math.Pow(Y1 - Y2, 2.0) + Math.Pow(Z1 - Z2, 2.0));
+            return S;
+        }
+
+        private Mat VerticalConcat(Mat image1, Mat image2)
+        {
+            var smallImage = image1.Cols < image2.Cols ? image1 : image2;
+            var bigImage = image1.Cols > image2.Cols ? image1 : image2;
+            Mat combine = Mat.Zeros(new Size(Math.Abs(image2.Cols - image1.Cols), smallImage.Height), image2.Type());
+            Cv2.HConcat(smallImage, combine, combine);
+            Cv2.VConcat(bigImage, combine, combine);
+            return combine;
+        }
+
         /// <summary>
         /// REST API
         /// </summary>
@@ -64,8 +81,28 @@ namespace WSC_AI
                     if (Main_Form.defect_out.Count>0)
                     {
 
+                        if (lengh_S(Main_Form.defect_out[Main_Form.defect_out.Count - 1].DefectCoordinates.X,
+                            Main_Form.defect_out[Main_Form.defect_out.Count - 1].DefectCoordinates.Y,
+                            Main_Form.defect_out[Main_Form.defect_out.Count - 1].DefectCoordinates.Z,
+                            result.DefectCoordinates.X,
+                            result.DefectCoordinates.Y,
+                            result.DefectCoordinates.Z) < 25.0) 
+                        {
+                            Main_Form.defect_out[Main_Form.defect_out.Count - 1].Descriptions.AddRange(result.Descriptions);
+                            Main_Form.defect_out[Main_Form.defect_out.Count - 1].ImageBase64 = Base64Image.Base64Encode(
+                                VerticalConcat(Base64Image.Base64Decode(Main_Form.defect_out[Main_Form.defect_out.Count - 1].ImageBase64),
+                                Base64Image.Base64Decode(result.ImageBase64)));
+                        }
+                        else
+                        {
+                            Main_Form.defect_out.Add(result);
+                        }
                     }
-                    Main_Form.defect_out.Add(result);
+                    else
+                    {
+                        Main_Form.defect_out.Add(result);
+                    }
+                    
                 }
             }
 
