@@ -26,6 +26,7 @@ namespace WSC_AI
         static public List<Defect> defect_out = new List<Defect>();
         static public volatile bool REST_RUN;
         public volatile String TIME_FOLDER;
+        public volatile String DetalFromHMI;
 
         /// <summary>
         /// 
@@ -34,6 +35,8 @@ namespace WSC_AI
         {
 
             TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
+            DetalFromHMI = "";
+
             cap = new Capture();
             cap.SetConfig();
             OPC_client = new OPC();
@@ -137,6 +140,7 @@ namespace WSC_AI
                     defect_out.Clear();
                     AI.INDEX_DEFECT = 0;
                     TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
+                    DetalFromHMI = OPC_client.GetDetalFromHMI().Replace("\0", string.Empty);
                     OPC_client.SetnisCameraVideoReadyFalse();
                 }
                 if (OPC_client.GetnisCameraInPosition())
@@ -442,7 +446,7 @@ namespace WSC_AI
                             var defect = new Defect();
                             defect.DefectId = AI.INDEX_DEFECT;
                             defect.DefectCoordinates = defectCoordinates;
-                            defect.Descriptions.Add("Шов не обнаружен");
+                            defect.Descriptions.Add("Шов отсутствует(физически либо зачищен/загрязнён)");
 
                             Mat To_Base = new Mat();
                             Cv2.Resize(image, To_Base, AI.image2base);
@@ -519,7 +523,7 @@ namespace WSC_AI
 
         private void SaveImage(Mat img, String Timestamp)
         {
-            String m_exePath = cap.ImageSavePath + "//" + DateTime.Now.ToShortDateString()+"_"+ TIME_FOLDER;
+            String m_exePath = cap.ImageSavePath + "//" + DateTime.Now.ToShortDateString()+"_"+ TIME_FOLDER + "__" + DetalFromHMI;
             String img_path = m_exePath + "//" + Timestamp + ".jpg";
 
             if (Directory.Exists(m_exePath))
