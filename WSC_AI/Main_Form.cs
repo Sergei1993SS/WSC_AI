@@ -11,6 +11,7 @@ using DefectMessageNamespace;
 using System.Management;
 using System.Text;
 using NumSharp;
+using System.Diagnostics;
 
 
 namespace WSC_AI
@@ -32,6 +33,29 @@ namespace WSC_AI
         /// </summary>
         public Main_Form()
         {
+            /*Defect def = new Defect();
+            def.Descriptions.AddRange(new List<String> { "Шов не обнаружен(Отсутствует/зачищен/сильно загрязнен)", "Кратер или раковина", "Брызги металла", "Прожог или Поры или свищ" });
+            defect_out.Add(def);
+
+            def = new Defect();
+            def.Descriptions.AddRange(new List<String> { "Шов не обнаружен(Отсутствует/зачищен/сильно загрязнен)", "Кратер или раковина", "Брызги металла" });
+            defect_out.Add(def);
+
+            def = new Defect();
+            def.Descriptions.AddRange(new List<String> { "Шов не обнаружен(Отсутствует/зачищен/сильно загрязнен)", "Кратер или раковина" });
+            defect_out.Add(def);
+
+            def = new Defect();
+            def.Descriptions.AddRange(new List<String> { "Шов не обнаружен(Отсутствует/зачищен/сильно загрязнен)", "Шлак" });
+            defect_out.Add(def);
+
+            Excel_UPLoad Exel = new Excel_UPLoad();
+            Exel.WriteStat(defect_out);
+            Exel = null;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();*/
 
             TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
             cap = new Capture();
@@ -134,6 +158,17 @@ namespace WSC_AI
                 if (OPC_client.GetisCameraVideoReady())
                 {
                     defects = new ConcurrentQueue<Defect>();
+
+                    if (defect_out.Count>0)
+                    {
+                        Excel_UPLoad Exel = new Excel_UPLoad();
+                        Exel.WriteStat(defect_out);
+                        Exel = null;
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                    }
                     defect_out.Clear();
                     AI.INDEX_DEFECT = 0;
                     TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
@@ -442,7 +477,7 @@ namespace WSC_AI
                             var defect = new Defect();
                             defect.DefectId = AI.INDEX_DEFECT;
                             defect.DefectCoordinates = defectCoordinates;
-                            defect.Descriptions.Add("Шов не обнаружен");
+                            defect.Descriptions.Add(AI.DICTIONARY_DEFECTS[4]);
 
                             Mat To_Base = new Mat();
                             Cv2.Resize(image, To_Base, AI.image2base);

@@ -88,7 +88,15 @@ namespace WSC_AI
                             result.DefectCoordinates.Y,
                             result.DefectCoordinates.Z) < 25.0) 
                         {
-                            Main_Form.defect_out[Main_Form.defect_out.Count - 1].Descriptions.AddRange(result.Descriptions);
+
+                            foreach (var item in result.Descriptions)
+                            {
+                                if (!Main_Form.defect_out[Main_Form.defect_out.Count - 1].Descriptions.Contains(item))
+                                {
+                                    Main_Form.defect_out[Main_Form.defect_out.Count - 1].Descriptions.Add(item);
+                                }
+                            }
+
                             Main_Form.defect_out[Main_Form.defect_out.Count - 1].ImageBase64 = Base64Image.Base64Encode(
                                 VerticalConcat(Base64Image.Base64Decode(Main_Form.defect_out[Main_Form.defect_out.Count - 1].ImageBase64),
                                 Base64Image.Base64Decode(result.ImageBase64)));
