@@ -33,29 +33,6 @@ namespace WSC_AI
         /// </summary>
         public Main_Form()
         {
-            /*Defect def = new Defect();
-            def.Descriptions.AddRange(new List<String> { "Шов не обнаружен(Отсутствует/зачищен/сильно загрязнен)", "Кратер или раковина", "Брызги металла", "Прожог или Поры или свищ" });
-            defect_out.Add(def);
-
-            def = new Defect();
-            def.Descriptions.AddRange(new List<String> { "Шов не обнаружен(Отсутствует/зачищен/сильно загрязнен)", "Кратер или раковина", "Брызги металла" });
-            defect_out.Add(def);
-
-            def = new Defect();
-            def.Descriptions.AddRange(new List<String> { "Шов не обнаружен(Отсутствует/зачищен/сильно загрязнен)", "Кратер или раковина" });
-            defect_out.Add(def);
-
-            def = new Defect();
-            def.Descriptions.AddRange(new List<String> { "Шов не обнаружен(Отсутствует/зачищен/сильно загрязнен)", "Шлак" });
-            defect_out.Add(def);
-
-            Excel_UPLoad Exel = new Excel_UPLoad();
-            Exel.WriteStat(defect_out);
-            Exel = null;
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
-            GC.WaitForPendingFinalizers();*/
 
             TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
             cap = new Capture();
