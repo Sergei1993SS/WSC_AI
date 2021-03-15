@@ -11,6 +11,7 @@ using DefectMessageNamespace;
 using System.Management;
 using System.Text;
 using NumSharp;
+using System.Diagnostics;
 
 
 namespace WSC_AI
@@ -137,6 +138,17 @@ namespace WSC_AI
                 if (OPC_client.GetisCameraVideoReady())
                 {
                     defects = new ConcurrentQueue<Defect>();
+
+                    if (defect_out.Count>0)
+                    {
+                        Excel_UPLoad Exel = new Excel_UPLoad();
+                        Exel.WriteStat(defect_out);
+                        Exel = null;
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                    }
                     defect_out.Clear();
                     AI.INDEX_DEFECT = 0;
                     TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
@@ -446,7 +458,7 @@ namespace WSC_AI
                             var defect = new Defect();
                             defect.DefectId = AI.INDEX_DEFECT;
                             defect.DefectCoordinates = defectCoordinates;
-                            defect.Descriptions.Add("Шов отсутствует(физически либо зачищен/загрязнён)");
+                            defect.Descriptions.Add(AI.DICTIONARY_DEFECTS[4]);//конфликт
 
                             Mat To_Base = new Mat();
                             Cv2.Resize(image, To_Base, AI.image2base);

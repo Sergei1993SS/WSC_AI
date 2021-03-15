@@ -27,7 +27,7 @@ namespace WSC_AI
         public double GPU_memory_Presence_Weld = 0.1;
         public double GPU_memory_Defects_Weld = 0.9;
 
-        public Size size_weld_defect = new Size(1648, 1248);
+        public Size size_weld_defect = new Size(2048, 2448);
         public Size size_weld_presence = new Size(948, 548);
         public Size image2base = new Size(948, 548);
 
@@ -39,7 +39,13 @@ namespace WSC_AI
             { 0, "Шлак" },
             { 1, "Прожог или Поры или свищ" },
             { 2, "Брызги металла"},
-            { 3, "Кратер или раковина"}};
+            { 3, "Кратер или раковина"},
+            { 4, "Шов не обнаружен(Отсутствует/зачищен/сильно загрязнен)"} };
+
+
+
+        public String path_stat_defects = "C:\\Users\\User\\Desktop\\Статистика дефектов шва";
+        public String NameExcelBook = "Статистика дефектов.xlsx";
     }
 
     struct TScan_and_Images
