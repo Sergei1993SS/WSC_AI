@@ -454,7 +454,7 @@ namespace WSC_AI
                             var defect = new Defect();
                             defect.DefectId = AI.INDEX_DEFECT;
                             defect.DefectCoordinates = defectCoordinates;
-                            defect.Descriptions.Add(AI.DICTIONARY_DEFECTS[4]);
+                            defect.Descriptions.Add(AI.DICTIONARY_DEFECTS[4]);//конфликт
 
                             Mat To_Base = new Mat();
                             Cv2.Resize(image, To_Base, AI.image2base);
