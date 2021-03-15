@@ -27,7 +27,7 @@ namespace WSC_AI
         public double GPU_memory_Presence_Weld = 0.1;
         public double GPU_memory_Defects_Weld = 0.9;
 
-        public Size size_weld_defect = new Size(2048, 2448);
+        public Size size_weld_defect = new Size(2448, 2048);
         public Size size_weld_presence = new Size(948, 548);
         public Size image2base = new Size(948, 548);
 
@@ -44,7 +44,7 @@ namespace WSC_AI
 
 
 
-        public String path_stat_defects = "C:\\Users\\User\\Desktop\\Статистика дефектов шва";
+        public String path_stat_defects = "D:\\Статистика дефектов";
         public String NameExcelBook = "Статистика дефектов.xlsx";
     }
 

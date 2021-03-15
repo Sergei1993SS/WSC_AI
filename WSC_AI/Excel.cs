@@ -4,7 +4,7 @@ using DefectMessageNamespace;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.IO;
 using System.Drawing;
-using System.Runtime.InteropServices;
+
 
 namespace WSC_AI
 {
