@@ -188,6 +188,81 @@ namespace WSC_AI
 
         }
 
+        public string GetDetalFromHMI()
+        {
+        get_node:
+
+            try
+            {
+                Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.DetalCodeFromHMI");
+                if (value.Status.IsGood)
+                {
+                    OPC_Connecting = true;
+                    return (string)value.Value;
+                }
+                else
+                {
+                    LogWriter log = new LogWriter("Ошибка получения DetalFromHMI");
+                    goto get_node;
+
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                LogWriter log = new LogWriter("Ошибка получения DetalFromHMI(Исключение). Переподключение к серверу");
+                OPC_Connecting = false;
+                try
+                {
+                    log = new LogWriter("Разрываем соеденение: " + Client.State.ToString());
+                    Client.Disconnect();
+                    log = new LogWriter("Разорвали соеденение: " + Client.State.ToString());
+                }
+                catch (Exception)
+                {
+                    log = new LogWriter("Ошибка разрыва: " + Client.State.ToString());
+
+                    try
+                    {
+                        log = new LogWriter("Удаляем клиента ");
+                        Client.Dispose();
+
+                        log = new LogWriter("Создаем нового ");
+                        Client = new OpcClient(Server_Name);
+                        //Client.DisconnectTimeout = 1000;
+                        //Client.SessionTimeout = 2147483647;  //2147483647     
+                        //Client.ReconnectTimeout = 20;
+
+                        try
+                        {
+                            log = new LogWriter("Соединяем " + Client.State.ToString());
+                            Client.Connect();
+                        }
+                        catch (Exception)
+                        {
+                            log = new LogWriter("Неудчная попытка соеденения " + Client.State.ToString());
+
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+
+                    }
+
+
+
+
+                }
+
+
+                goto get_node;
+            }
+
+        }
+
         public void SetnisCameraVideoReadyFalse()
         {
         set_node:
