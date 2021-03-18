@@ -137,7 +137,7 @@ namespace WSC_AI
             {
                 if (OPC_client.GetisCameraVideoReady())
 
-                {  if (OPC_client.Programms_875.Contains(OPC_client.GetDetalCodeFromHMI()))
+                {  if (OPC_client.Programms_875.Contains(OPC_client.GetDetalFromHMI()))
                     {
                         if (cap.Basler_camera.IsOpen)
                         {
@@ -145,7 +145,7 @@ namespace WSC_AI
                         }
                         cap.SetConfig(cap.CamConfigPath_875);
                     }
-                    else if (OPC_client.Programms_Metro.Contains(OPC_client.GetDetalCodeFromHMI()))
+                    else if (OPC_client.Programms_Metro.Contains(OPC_client.GetDetalFromHMI()))
                     {
                         if (cap.Basler_camera.IsOpen)
                         {
