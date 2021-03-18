@@ -49,15 +49,15 @@ namespace WSC_AI
         /// <summary>
         /// УСТАНАВЛИВАЕМ НУЖНУЮ КОНФИГУРАЦИЮ
         /// </summary>
-        public void SetConfig()
+        public void SetConfig(String ConfigPath)
         {
             
         set_config:
                 try
                 {
                     this.Basler_camera.Open();
-                    this.Basler_camera.Parameters.Load(CamConfigPath, ParameterPath.CameraDevice);
-                    LogWriter log = new LogWriter("Загружен конфиг: " + CamConfigPath);
+                    this.Basler_camera.Parameters.Load(ConfigPath, ParameterPath.CameraDevice);
+                    LogWriter log = new LogWriter("Загружен конфиг: " + ConfigPath);
                     this.IsSetConfig = true;
 
  
