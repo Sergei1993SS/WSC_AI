@@ -341,6 +341,43 @@ namespace WSC_AI
 
         }
 
+        public string GetDetalCodeFromHMI()
+        {
+        get_node:
+            try
+            {
+                Opc.UaFx.OpcValue value = Client.ReadNode("ns=1;s=MainChannel.MetrologPC.DetalCodeFromHMI");
+                if (value.Status.IsGood)
+                {
+                    OPC_Connecting = true;
+                    return (string)value.Value;
+                }
+                else
+                {
+                    LogWriter log = new LogWriter("Ошибка получения DetalCodeFromHMI");
+                    goto get_node;
+                }
+            }
+            catch (Exception)
+            {
+
+                LogWriter log = new LogWriter("Ошибка получения DetalCodeFromHMI(Исключение). Переподключение");
+                OPC_Connecting = false;
+                try
+                {
+                    Client.Disconnect();
+                }
+                catch (Exception)
+                {
+
+                }
+
+                Reconnect();
+                goto get_node;
+            }
+
+        }
+
         public void SetisCameraShotComplete()
         {
 

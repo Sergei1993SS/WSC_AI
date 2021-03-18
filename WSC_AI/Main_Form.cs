@@ -39,7 +39,7 @@ namespace WSC_AI
             DetalFromHMI = "";
 
             cap = new Capture();
-            cap.SetConfig();
+            
             OPC_client = new OPC();
             Images = new ConcurrentQueue<TScan_and_Images>();
 
@@ -136,7 +136,25 @@ namespace WSC_AI
             while (true)
             {
                 if (OPC_client.GetisCameraVideoReady())
-                {
+
+                {  if (OPC_client.Programms_875.Contains(OPC_client.GetDetalCodeFromHMI()))
+                    {
+                        if (cap.Basler_camera.IsOpen)
+                        {
+                            cap.Basler_camera.Close();
+                        }
+                        cap.SetConfig(cap.CamConfigPath_875);
+                    }
+                    else if (OPC_client.Programms_Metro.Contains(OPC_client.GetDetalCodeFromHMI()))
+                    {
+                        if (cap.Basler_camera.IsOpen)
+                        {
+                            cap.Basler_camera.Close();
+                        }
+                        cap.SetConfig(cap.CamConfigPath_Metro);
+                    }
+
+
                     defects = new ConcurrentQueue<Defect>();
 
                     if (defect_out.Count>0)

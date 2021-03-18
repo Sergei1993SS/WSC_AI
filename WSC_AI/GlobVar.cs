@@ -9,13 +9,12 @@ namespace WSC_AI
     public class Globals
     {
 
-        //Путь к конфигу камеры
-        public String CamConfigPath = "config/acA2440-20gc.pfs";
+        
 
         //Максимальное количество снимков в буфере
-        public UInt16 MaxBufferSize = 10; 
+        public UInt16 MaxBufferSize = 10;
 
-        public String Server_Name= "opc.tcp://127.0.0.1:4334";
+        public String Server_Name = "opc.tcp://127.0.0.1:4334";
 
         public String ImageSavePath = "D:\\Images";
         public int SleepProcessCam = 500;
@@ -35,7 +34,7 @@ namespace WSC_AI
         public float threshold_weld = 0.3f;
         public float threshold_defect = 0.7f;
 
-        public Dictionary<int, String> DICTIONARY_DEFECTS = new Dictionary<int, string> { 
+        public Dictionary<int, String> DICTIONARY_DEFECTS = new Dictionary<int, string> {
             { 0, "Шлак" },
             { 1, "Прожог или Поры или свищ" },
             { 2, "Брызги металла"},
@@ -46,6 +45,14 @@ namespace WSC_AI
 
         public String path_stat_defects = "D:\\Статистика дефектов";
         public String NameExcelBook = "Статистика дефектов.xlsx";
+
+
+        public List<String> Programms_Metro = new List<String> { };
+        public List<String> Programms_875 = new List<String> {};
+
+        //Путь к конфигу камеры
+        public String CamConfigPath_875 = "config/acA2440-20gc.pfs";
+        public String CamConfigPath_Metro = "config/acA2440-20gc.pfs";
     }
 
     struct TScan_and_Images
