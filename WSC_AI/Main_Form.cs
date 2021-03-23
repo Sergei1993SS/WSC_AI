@@ -19,7 +19,9 @@ namespace WSC_AI
     
     public partial class Main_Form : Form
     {
+        
         Capture cap;
+        
         OPC OPC_client;
         ConcurrentQueue<TScan_and_Images> Images;
         AI_TF AI;
@@ -38,8 +40,10 @@ namespace WSC_AI
             TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
             DetalFromHMI = "";
 
-            cap = new Capture();
             
+
+            cap = new Capture();
+
             OPC_client = new OPC();
             Images = new ConcurrentQueue<TScan_and_Images>();
 
@@ -143,7 +147,9 @@ namespace WSC_AI
                         {
                             cap.Basler_camera.Close();
                         }
-                        cap.SetConfig(cap.CamConfigPath_875);
+
+                        Globals.CurrentCamConfig = cap.CamConfigPath_875;
+                        cap.SetConfig(Globals.CurrentCamConfig);
                     }
                     else if (OPC_client.Programms_Metro.Contains(OPC_client.GetDetalFromHMI()))
                     {
@@ -151,7 +157,9 @@ namespace WSC_AI
                         {
                             cap.Basler_camera.Close();
                         }
-                        cap.SetConfig(cap.CamConfigPath_Metro);
+
+                        Globals.CurrentCamConfig = cap.CamConfigPath_Metro;
+                        cap.SetConfig(Globals.CurrentCamConfig);
                     }
 
 
@@ -532,6 +540,7 @@ namespace WSC_AI
                             cap.Basler_camera.Dispose();
                         }
 
+                        SaverSession.Save(defect_out, Globals.CurrentCamConfig, Globals.PathSaveAppData);
                         OPC_client.Client.Disconnect();
                         OPC_client.Client.Dispose();
 
@@ -597,7 +606,21 @@ namespace WSC_AI
                 AI.ERR_CONNECT = true;
                 this.Close();
             }
+
+            if (File.Exists(Globals.PathSaveAppData + "\\" + "AppData.json"))
+            {
+                AppData content = SaverSession.Load(Globals.PathSaveAppData + "\\" + "AppData.json");
+                defect_out.AddRange(content.defect_out);
+                Globals.CurrentCamConfig = content.camera_config;
+                cap.SetConfig(Globals.CurrentCamConfig);
+            }
+            else
+            {
+                Globals.CurrentCamConfig = cap.CamConfigPath_875;
+                cap.SetConfig(Globals.CurrentCamConfig);
+            }
             
+
         }
 
         private void RunREST()

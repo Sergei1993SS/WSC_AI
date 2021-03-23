@@ -2,6 +2,7 @@
 using Basler.Pylon;
 using OpenCvSharp;
 using System.Collections.Generic;
+using DefectMessageNamespace;
 
 
 namespace WSC_AI
@@ -9,7 +10,7 @@ namespace WSC_AI
     public class Globals
     {
 
-        
+
 
         //Максимальное количество снимков в буфере
         public UInt16 MaxBufferSize = 10;
@@ -42,17 +43,20 @@ namespace WSC_AI
             { 4, "Шов не обнаружен(Отсутствует/зачищен/сильно загрязнен)"} };
 
 
-
+        // Пути выгрузки статистики в Excel
         public String path_stat_defects = "D:\\Статистика дефектов";
         public String NameExcelBook = "Статистика дефектов.xlsx";
 
-
-        public List<String> Programms_Metro = new List<String> { };
+        //Списки управляющих программ Metrolog from HMI(Заполнить)
+        public List<String> Programms_Metro = new List<String> {};
         public List<String> Programms_875 = new List<String> {};
 
         //Путь к конфигу камеры
         public String CamConfigPath_875 = "config/acA2440-20gc.pfs";
         public String CamConfigPath_Metro = "config/acA2440-20gc.pfs";
+        public static String CurrentCamConfig = "";
+
+        public static String PathSaveAppData = ".AppData";
     }
 
     struct TScan_and_Images
@@ -76,6 +80,12 @@ namespace WSC_AI
             Rz = _Rz;
 
         }
+    }
+
+    struct AppData
+    {
+        public List<Defect> defect_out { get; set; }
+        public String camera_config { get; set; }
     }
     
 }

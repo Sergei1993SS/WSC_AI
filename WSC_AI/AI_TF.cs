@@ -1,7 +1,6 @@
 ﻿using NumSharp;
 using Tensorflow;
 using System.IO;
-//using static Tensorflow.Binding;
 using System; 
 using System.Collections.Generic;
 using OpenCvSharp;
@@ -289,15 +288,11 @@ namespace WSC_AI
                     long time = sw.ElapsedMilliseconds;
                     sw.Reset();
                     GC.Collect();
-                    int ppp = 0;
 
 
                 }
             //}
 
-            
-            
-            int p = 0;
             
         }
 
