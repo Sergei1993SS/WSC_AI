@@ -143,7 +143,10 @@ namespace WSC_AI
 
             }
 
-            sheet.Cells[row_start + 1, 1] = DateTime.Now.ToString();
+            String current_DateTime = DateTime.Now.ToString();
+
+            //Записываем дату выгрузки
+            sheet.Cells[row_start + 1, 1] = current_DateTime;
 
 
             Excel.Range c1 = sheet.Cells[1, 1];
@@ -197,6 +200,11 @@ namespace WSC_AI
             GC.WaitForPendingFinalizers();
             GC.Collect();
             GC.WaitForPendingFinalizers();
+
+        }
+
+        public void WriteImages(List<Defect> defect_out, String DateTime)
+        {
 
         }
     }

@@ -44,7 +44,7 @@ namespace WSC_AI
 
 
         // Пути выгрузки статистики в Excel
-        public String path_stat_defects = "D:\\Статистика дефектов";
+        public String path_stat_defects = "C:\\Статистика дефектов";
         public String NameExcelBook = "Статистика дефектов.xlsx";
 
         //Списки управляющих программ Metrolog from HMI(Заполнить)
