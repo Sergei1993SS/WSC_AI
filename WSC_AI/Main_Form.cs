@@ -38,13 +38,17 @@ namespace WSC_AI
         {
 
             TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
-            DetalFromHMI = "";
-
             
+
+
 
             cap = new Capture();
 
+            Globals.CurrentCamConfig = cap.CamConfigPath_875;
+            cap.SetConfig(Globals.CurrentCamConfig);
+
             OPC_client = new OPC();
+            DetalFromHMI = OPC_client.GetDetalCodeFromHMI();
             Images = new ConcurrentQueue<TScan_and_Images>();
 
             OPC_client.OPC_Connecting = false;
@@ -139,9 +143,11 @@ namespace WSC_AI
         {
             while (true)
             {
-                if (OPC_client.GetisCameraVideoReady())
+                if (OPC_client.GetisCameraVideoReady())         
+                {
+                    DetalFromHMI = OPC_client.GetDetalCodeFromHMI();
 
-                {  if (OPC_client.Programms_875.Contains(OPC_client.GetDetalFromHMI()))
+                    if (OPC_client.Programms_875.Contains(DetalFromHMI))
                     {
                         if (cap.Basler_camera.IsOpen)
                         {
@@ -151,7 +157,7 @@ namespace WSC_AI
                         Globals.CurrentCamConfig = cap.CamConfigPath_875;
                         cap.SetConfig(Globals.CurrentCamConfig);
                     }
-                    else if (OPC_client.Programms_Metro.Contains(OPC_client.GetDetalFromHMI()))
+                    else if (OPC_client.Programms_Metro.Contains(DetalFromHMI))
                     {
                         if (cap.Basler_camera.IsOpen)
                         {
@@ -178,7 +184,6 @@ namespace WSC_AI
                     defect_out.Clear();
                     AI.INDEX_DEFECT = 0;
                     TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
-                    DetalFromHMI = OPC_client.GetDetalFromHMI().Replace("\0", string.Empty);
                     OPC_client.SetnisCameraVideoReadyFalse();
                 }
                 if (OPC_client.GetnisCameraInPosition())

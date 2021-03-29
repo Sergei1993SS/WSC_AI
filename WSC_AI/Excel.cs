@@ -4,6 +4,7 @@ using DefectMessageNamespace;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.IO;
 using System.Drawing;
+using OpenCvSharp;
 
 
 namespace WSC_AI
@@ -24,79 +25,159 @@ namespace WSC_AI
             ex = new Excel.Application();
             //Отобразить Excel
             ex.Visible = false;
-            
 
-            if (File.Exists(path_stat_defects + "\\" + NameExcelBook))
+            if (Directory.Exists(path_stat_defects))
             {
-                Workbooks = ex.Workbooks;
-                workBook = Workbooks.Open(path_stat_defects + "\\" + NameExcelBook,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                Type.Missing, Type.Missing);
-                //Отключить отображение окон с сообщениями
-                ex.DisplayAlerts = false;
-            }
-
-            else
-            {
-                ex.SheetsInNewWorkbook = 1;
-                //Добавить рабочую книгу
-                Workbooks = ex.Workbooks;
-                workBook = Workbooks.Add(Type.Missing);
-                //Отключить отображение окон с сообщениями
-                ex.DisplayAlerts = false;
-                //Получаем первый лист документа (счет начинается с 1)
-                sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1);
-                //Название листа (вкладки снизу)
-                sheet.Name = "Статистика";
-
-                sheet.Cells[1, 1] = "Дата выгрузки";
-                sheet.Cells[1, 2] = "ДСЕ и серийный №";
-                sheet.Cells[1, 3] = "Количество дефектов шт.";
-
-                Excel.Range c1 = sheet.Cells[1, 1];
-                Excel.Range c2 = sheet.Cells[2, 1];
-                //Захватываем диапазон ячеек
-                Excel.Range range1 = sheet.get_Range(c1, c2);
-                range1.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
-                range1.Cells.Font.Size = 14;
-                range1.Merge();
-
-                c1 = sheet.Cells[1, 2];
-                c2 = sheet.Cells[2, 2];
-                //Захватываем диапазон ячеек
-                range1 = sheet.get_Range(c1, c2);
-                range1.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
-                range1.Cells.Font.Size = 14;
-                range1.Merge();
-
-                c1 = sheet.Cells[1, 3];
-                c2 = sheet.Cells[1, LIST_DEFECTS.Count+2];
-                //Захватываем диапазон ячеек
-                range1 = sheet.get_Range(c1, c2);
-                range1.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
-                range1.Cells.Font.Size = 14;
-                range1.Merge();
-
-                for (int i = 3; i < LIST_DEFECTS.Count+3; i++)
+                if (File.Exists(path_stat_defects + "\\" + NameExcelBook))
                 {
-                    sheet.Cells[2, i] = LIST_DEFECTS[i-3];
+                    Workbooks = ex.Workbooks;
+                    workBook = Workbooks.Open(path_stat_defects + "\\" + NameExcelBook,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                    Type.Missing, Type.Missing);
+                    //Отключить отображение окон с сообщениями
+                    ex.DisplayAlerts = false;
                 }
 
+                else
+                {
+                    ex.SheetsInNewWorkbook = 1;
+                    //Добавить рабочую книгу
+                    Workbooks = ex.Workbooks;
+                    workBook = Workbooks.Add(Type.Missing);
+                    //Отключить отображение окон с сообщениями
+                    ex.DisplayAlerts = false;
+                    //Получаем первый лист документа (счет начинается с 1)
+                    sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1);
+                    //Название листа (вкладки снизу)
+                    sheet.Name = "Статистика";
+
+                    sheet.Cells[1, 1] = "Дата выгрузки";
+                    sheet.Cells[1, 2] = "ДСЕ и серийный №";
+                    sheet.Cells[1, 3] = "Количество дефектов шт.";
+
+                    Excel.Range c1 = sheet.Cells[1, 1];
+                    Excel.Range c2 = sheet.Cells[2, 1];
+                    //Захватываем диапазон ячеек
+                    Excel.Range range1 = sheet.get_Range(c1, c2);
+                    range1.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+                    range1.Cells.Font.Size = 14;
+                    range1.Merge();
+
+                    c1 = sheet.Cells[1, 2];
+                    c2 = sheet.Cells[2, 2];
+                    //Захватываем диапазон ячеек
+                    range1 = sheet.get_Range(c1, c2);
+                    range1.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+                    range1.Cells.Font.Size = 14;
+                    range1.Merge();
+
+                    c1 = sheet.Cells[1, 3];
+                    c2 = sheet.Cells[1, LIST_DEFECTS.Count + 2];
+                    //Захватываем диапазон ячеек
+                    range1 = sheet.get_Range(c1, c2);
+                    range1.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+                    range1.Cells.Font.Size = 14;
+                    range1.Merge();
+
+                    for (int i = 3; i < LIST_DEFECTS.Count + 3; i++)
+                    {
+                        sheet.Cells[2, i] = LIST_DEFECTS[i - 3];
+                    }
 
 
-                ex.Application.ActiveWorkbook.SaveAs(path_stat_defects + "\\" + NameExcelBook, Type.Missing,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlNoChange,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+
+                    ex.Application.ActiveWorkbook.SaveAs(path_stat_defects + "\\" + NameExcelBook, Type.Missing,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlNoChange,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 
 
 
-                range1 = null;
-                c1 = null;
-                c2 = null;
+                    range1 = null;
+                    c1 = null;
+                    c2 = null;
+                }
+                }
+            else
+            {
+                Directory.CreateDirectory(path_stat_defects);
 
+                if (File.Exists(path_stat_defects + "\\" + NameExcelBook))
+                {
+                    Workbooks = ex.Workbooks;
+                    workBook = Workbooks.Open(path_stat_defects + "\\" + NameExcelBook,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                    Type.Missing, Type.Missing);
+                    //Отключить отображение окон с сообщениями
+                    ex.DisplayAlerts = false;
+                }
+
+                else
+                {
+                    ex.SheetsInNewWorkbook = 1;
+                    //Добавить рабочую книгу
+                    Workbooks = ex.Workbooks;
+                    workBook = Workbooks.Add(Type.Missing);
+                    //Отключить отображение окон с сообщениями
+                    ex.DisplayAlerts = false;
+                    //Получаем первый лист документа (счет начинается с 1)
+                    sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1);
+                    //Название листа (вкладки снизу)
+                    sheet.Name = "Статистика";
+
+                    sheet.Cells[1, 1] = "Дата выгрузки";
+                    sheet.Cells[1, 2] = "ДСЕ и серийный №";
+                    sheet.Cells[1, 3] = "Количество дефектов шт.";
+
+                    Excel.Range c1 = sheet.Cells[1, 1];
+                    Excel.Range c2 = sheet.Cells[2, 1];
+                    //Захватываем диапазон ячеек
+                    Excel.Range range1 = sheet.get_Range(c1, c2);
+                    range1.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+                    range1.Cells.Font.Size = 14;
+                    range1.Merge();
+
+                    c1 = sheet.Cells[1, 2];
+                    c2 = sheet.Cells[2, 2];
+                    //Захватываем диапазон ячеек
+                    range1 = sheet.get_Range(c1, c2);
+                    range1.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+                    range1.Cells.Font.Size = 14;
+                    range1.Merge();
+
+                    c1 = sheet.Cells[1, 3];
+                    c2 = sheet.Cells[1, LIST_DEFECTS.Count + 2];
+                    //Захватываем диапазон ячеек
+                    range1 = sheet.get_Range(c1, c2);
+                    range1.Interior.Color = ColorTranslator.ToOle(Color.LightGray);
+                    range1.Cells.Font.Size = 14;
+                    range1.Merge();
+
+                    for (int i = 3; i < LIST_DEFECTS.Count + 3; i++)
+                    {
+                        sheet.Cells[2, i] = LIST_DEFECTS[i - 3];
+                    }
+
+
+
+                    ex.Application.ActiveWorkbook.SaveAs(path_stat_defects + "\\" + NameExcelBook, Type.Missing,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlNoChange,
+                    Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+
+
+
+                    range1 = null;
+                    c1 = null;
+                    c2 = null;
+                }
             }
+
+            
+
+            
 
             
         }
@@ -143,7 +224,8 @@ namespace WSC_AI
 
             }
 
-            String current_DateTime = DateTime.Now.ToString();
+            String current_DateTime = DateTime.Now.ToShortDateString() + "__"+ DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
+            WriteImages(defect_out, current_DateTime);
 
             //Записываем дату выгрузки
             sheet.Cells[row_start + 1, 1] = current_DateTime;
@@ -185,7 +267,7 @@ namespace WSC_AI
 
 
             workBook.Close();
-            Workbooks.Close();
+            //Workbooks.Close();
             sheet = null;
             c1 = null;
             c2 = null;
@@ -203,9 +285,29 @@ namespace WSC_AI
 
         }
 
-        public void WriteImages(List<Defect> defect_out, String DateTime)
+        private void WriteImages(List<Defect> defect_out, String DateTime)
         {
+            if (Directory.Exists(path_stat_defects))
+            {
+                //Create directores
+                Directory.CreateDirectory(path_stat_defects + "\\" + DateTime);
+                for (int i = 0; i < LIST_DEFECTS.Count; i++)
+                {
+                    Directory.CreateDirectory(path_stat_defects + "\\" + DateTime + "\\" + LIST_DEFECTS[i]);
+                }
 
+                for (int i = 0; i < defect_out.Count; i++)
+                {
+                    Mat Image = Base64Image.Base64Decode(defect_out[i].ImageBase64);
+
+                    for (int j = 0; j < defect_out[i].Descriptions.Count; j++)
+                    {
+                        Cv2.ImWrite(path_stat_defects + "\\" + DateTime + "\\" + defect_out[i].Descriptions[j]+"\\" + i.ToString() + j.ToString()+ ".jpg", Image);
+                    }
+                    
+                }
+                
+            }
         }
     }
 }

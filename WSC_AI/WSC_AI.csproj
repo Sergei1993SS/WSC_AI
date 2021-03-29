@@ -265,8 +265,8 @@
     <Reference Include="NumSharp.Lite, Version=0.1.11.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\NumSharp.Lite.0.1.11\lib\netstandard2.0\NumSharp.Lite.dll</HintPath>
     </Reference>
-    <Reference Include="Opc.UaFx.Advanced, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0220af0d33d50236, processorArchitecture=MSIL">
-      <HintPath>..\packages\Opc.UaFx.Advanced.2.11.5\lib\net471\Opc.UaFx.Advanced.dll</HintPath>
+    <Reference Include="Opc.UaFx.Client, Version=2.0.0.0, Culture=neutral, PublicKeyToken=0220af0d33d50236, processorArchitecture=MSIL">
+      <HintPath>..\packages\Opc.UaFx.Client.2.14.0\lib\net471\Opc.UaFx.Client.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenCvSharp3-AnyCPU.4.0.0.20181129\lib\net461\OpenCvSharp.dll</HintPath>

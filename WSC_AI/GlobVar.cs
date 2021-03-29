@@ -40,16 +40,16 @@ namespace WSC_AI
             { 1, "Прожог или Поры или свищ" },
             { 2, "Брызги металла"},
             { 3, "Кратер или раковина"},
-            { 4, "Шов не обнаружен(Отсутствует/зачищен/сильно загрязнен)"} };
+            { 4, "Шов не обнаружен(осутствует-зачищен-сильно загрязнен)"} };
 
 
         // Пути выгрузки статистики в Excel
-        public String path_stat_defects = "C:\\Статистика дефектов";
+        public String path_stat_defects = "D:\\Статистика дефектов";
         public String NameExcelBook = "Статистика дефектов.xlsx";
 
         //Списки управляющих программ Metrolog from HMI(Заполнить)
         public List<String> Programms_Metro = new List<String> {};
-        public List<String> Programms_875 = new List<String> {};
+        public List<String> Programms_875 = new List<String> { "875.00w", "875.01w" };
 
         //Путь к конфигу камеры
         public String CamConfigPath_875 = "config/acA2440-20gc.pfs";
