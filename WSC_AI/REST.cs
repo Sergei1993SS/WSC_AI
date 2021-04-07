@@ -56,11 +56,11 @@ namespace WSC_AI
 
         private Mat VerticalConcat(Mat image1, Mat image2)
         {
-            var smallImage = image1.Cols < image2.Cols ? image1 : image2;
-            var bigImage = image1.Cols > image2.Cols ? image1 : image2;
-            Mat combine = Mat.Zeros(new Size(Math.Abs(image2.Cols - image1.Cols), smallImage.Height), image2.Type());
-            Cv2.HConcat(smallImage, combine, combine);
-            Cv2.VConcat(bigImage, combine, combine);
+            //Mat smallImage = image1.Cols < image2.Cols ? image1 : image2;
+            //Mat bigImage = image1.Cols > image2.Cols ? image1 : image2;
+            Mat combine = Mat.Zeros(new Size(image1.Width, image1.Height * 2), image2.Type());
+            //.HConcat(smallImage, combine, combine);
+            Cv2.VConcat(image1, image2, combine);
             return combine;
         }
 
@@ -97,9 +97,11 @@ namespace WSC_AI
                                 }
                             }
 
+                            Mat Img_prev = Base64Image.Base64Decode(Main_Form.defect_out[Main_Form.defect_out.Count - 1].ImageBase64);
+                            Mat Img_curr = Base64Image.Base64Decode(result.ImageBase64);
+
                             Main_Form.defect_out[Main_Form.defect_out.Count - 1].ImageBase64 = Base64Image.Base64Encode(
-                                VerticalConcat(Base64Image.Base64Decode(Main_Form.defect_out[Main_Form.defect_out.Count - 1].ImageBase64),
-                                Base64Image.Base64Decode(result.ImageBase64)));
+                                VerticalConcat(Img_curr, Img_prev));
                         }
                         else
                         {

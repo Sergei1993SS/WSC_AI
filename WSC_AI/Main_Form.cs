@@ -168,7 +168,7 @@ namespace WSC_AI
                         cap.SetConfig(Globals.CurrentCamConfig);
                     }
 
-
+                    SummaryDefects();
                     defects = new ConcurrentQueue<Defect>();
 
                     if (defect_out.Count>0)
@@ -521,8 +521,69 @@ namespace WSC_AI
             
         }
 
-    
+        public double lengh_S(double X1, double Y1, double Z1, double X2, double Y2, double Z2)
+        {
+            double S = Math.Sqrt(Math.Pow(X1 - X2, 2.0) + Math.Pow(Y1 - Y2, 2.0) + Math.Pow(Z1 - Z2, 2.0));
+            return S;
+        }
 
+        private Mat VerticalConcat(Mat image1, Mat image2)
+        {
+            //Mat smallImage = image1.Cols < image2.Cols ? image1 : image2;
+            //Mat bigImage = image1.Cols > image2.Cols ? image1 : image2;
+            Mat combine = Mat.Zeros(new Size(image1.Width, image1.Height * 2), image2.Type());
+            //.HConcat(smallImage, combine, combine);
+            Cv2.VConcat(image1, image2, combine);
+            return combine;
+        }
+
+        private void SummaryDefects()
+        {
+            while (Main_Form.defects.Count != 0)
+            {
+                Defect result;
+                if (Main_Form.defects.TryDequeue(out result))
+                {
+                    if (Main_Form.defect_out.Count > 0)
+                    {
+
+                        if (lengh_S(Main_Form.defect_out[Main_Form.defect_out.Count - 1].DefectCoordinates.X,
+                            Main_Form.defect_out[Main_Form.defect_out.Count - 1].DefectCoordinates.Y,
+                            Main_Form.defect_out[Main_Form.defect_out.Count - 1].DefectCoordinates.Z,
+                            result.DefectCoordinates.X,
+                            result.DefectCoordinates.Y,
+                            result.DefectCoordinates.Z) < 25.0)
+                        {
+
+                            foreach (var item in result.Descriptions)
+                            {
+                                if (!Main_Form.defect_out[Main_Form.defect_out.Count - 1].Descriptions.Contains(item))
+                                {
+                                    Main_Form.defect_out[Main_Form.defect_out.Count - 1].Descriptions.Add(item);
+                                }
+                            }
+
+                            Mat Img_prev = Base64Image.Base64Decode(Main_Form.defect_out[Main_Form.defect_out.Count - 1].ImageBase64);
+                            Mat Img_curr = Base64Image.Base64Decode(result.ImageBase64);
+
+                            Main_Form.defect_out[Main_Form.defect_out.Count - 1].ImageBase64 = Base64Image.Base64Encode(
+                                VerticalConcat(Img_curr, Img_prev));
+                        }
+                        else
+                        {
+                            Main_Form.defect_out.Add(result);
+                        }
+                    }
+                    else
+                    {
+                        Main_Form.defect_out.Add(result);
+                    }
+
+                }
+            }
+        }
+
+    
     /// <summary>
     /// ПЕРЕД ЗАКРЫТИЕМ ФОРМЫ
     /// </summary>
@@ -537,6 +598,8 @@ namespace WSC_AI
                     buttons: MessageBoxButtons.YesNo, icon: MessageBoxIcon.Question, defaultButton: MessageBoxDefaultButton.Button3, options: MessageBoxOptions.ServiceNotification);
                 if (res == DialogResult.Yes)
                 {
+                    SummaryDefects();
+
                     try
                     {
                         if (cap.Basler_camera.IsOpen)
