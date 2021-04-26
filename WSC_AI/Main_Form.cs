@@ -345,7 +345,7 @@ namespace WSC_AI
                         NDArray arr_weld = AI.load_vol(image, AI.size_weld_presence);
 
                         bool find_place = AI.weld_in_place(arr_weld);
-                        if (find_place)
+                        if (true)
                         {
                             arr_weld = AI.load_vol(image, AI.size_weld_defect);
 

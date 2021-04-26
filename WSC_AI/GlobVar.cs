@@ -33,7 +33,7 @@ namespace WSC_AI
 
 
         public float threshold_weld = 0.3f;
-        public float threshold_defect = 0.55f;
+        public float threshold_defect = 0.65f;
 
         public Dictionary<int, String> DICTIONARY_DEFECTS = new Dictionary<int, string> {
             { 0, "Шлак" },
