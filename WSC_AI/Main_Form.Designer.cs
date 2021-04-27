@@ -54,6 +54,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_REST)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_sess_2)).BeginInit();
@@ -79,6 +80,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.label_REST);
             this.groupBox1.Controls.Add(this.label12);
             this.groupBox1.Controls.Add(this.pictureBox_REST);
@@ -336,6 +338,17 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Модель:";
             // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Location = new System.Drawing.Point(543, 382);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(245, 52);
+            this.button1.TabIndex = 26;
+            this.button1.Text = "Выгрузить статистику на диск";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Main_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -386,6 +399,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label_REST;
         public System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button button1;
     }
 }
 

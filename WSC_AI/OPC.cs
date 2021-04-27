@@ -299,6 +299,45 @@ namespace WSC_AI
 
         }
 
+        public void SetnisCameraVideoReadyTrue()
+        {
+        set_node:
+
+            try
+            {
+                Opc.UaFx.OpcStatus status = Client.WriteNode("ns=1;s=MainChannel.MetrologPC.isCameraVideoReady", true);
+                if (!status.IsGood)
+                {
+                    LogWriter log = new LogWriter("Ошибка записи isCameraVideoReady");
+
+                    goto set_node;
+                }
+                else
+                {
+                    OPC_Connecting = true;
+                }
+            }
+            catch (Exception)
+            {
+
+                LogWriter log = new LogWriter("Ошибка записи isCameraVideoReady(Исключение). Переподключение");
+                OPC_Connecting = false;
+                try
+                {
+                    Client.Disconnect();
+                }
+                catch (Exception)
+                {
+
+                }
+
+                Reconnect();
+                goto set_node;
+            }
+
+
+        }
+
         public void SetnisCameraInPositionFalse()
         {
         set_node:

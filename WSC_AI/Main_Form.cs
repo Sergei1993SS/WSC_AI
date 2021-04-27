@@ -715,5 +715,9 @@ namespace WSC_AI
             return builder.ToString();
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            OPC_client.SetnisCameraVideoReadyTrue();
+        }
     }
 }

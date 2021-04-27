@@ -36,15 +36,15 @@ namespace WSC_AI
         public float threshold_defect = 0.65f;
 
         public Dictionary<int, String> DICTIONARY_DEFECTS = new Dictionary<int, string> {
-            { 0, "Шлак" },
+            { 0, "Шлаклаковые включения" },
             { 1, "Прожог или Поры или свищ" },
             { 2, "Брызги металла"},
             { 3, "Кратер или раковина"},
-            { 4, "Шов не обнаружен(осутствует-зачищен-сильно загрязнен)"} };
+            { 4, "Шов отсутствует"} };
 
 
         // Пути выгрузки статистики в Excel
-        public String path_stat_defects = "D:\\Статистика дефектов";
+        public String path_stat_defects = "C:\\Users\\0\\YandexDisk\\Статистика дефектов";
         public String NameExcelBook = "Статистика дефектов.xlsx";
 
         //Списки управляющих программ Metrolog from HMI(Заполнить)
