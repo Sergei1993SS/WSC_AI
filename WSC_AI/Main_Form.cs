@@ -169,6 +169,7 @@ namespace WSC_AI
                             GC.WaitForPendingFinalizers();
                             GC.Collect();
                             GC.WaitForPendingFinalizers();
+                            defect_out.Clear();
                         }
 
 
@@ -199,7 +200,7 @@ namespace WSC_AI
                         defect_out.Clear();
                     }
 
-                   
+                    defect_out.Clear();
                     AI.INDEX_DEFECT = 0;
                     TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
                     OPC_client.SetnisCameraVideoReadyFalse();
