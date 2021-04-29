@@ -371,7 +371,7 @@ namespace WSC_AI
                             String slice = "0:" + Convert.ToString(res.Shape[0] - 1);
                             
 
-                            if ((float)res[slice].max() > AI.threshold_defect && (float)res[res.Shape[0] - 1]<0.5) ///////////ПРОВЕРИТЬ
+                            if ((float)res[slice].max() >= AI.threshold_defect && (float)res[res.Shape[0] - 1]<0.6) ///////////ПРОВЕРИТЬ
                             {
                                 var defectCoordinates = new DefectCoordinates();
                                 double a = sample.Rx * (Math.PI / 180);
