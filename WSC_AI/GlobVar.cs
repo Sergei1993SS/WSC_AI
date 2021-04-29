@@ -48,8 +48,8 @@ namespace WSC_AI
         public String NameExcelBook = "Статистика дефектов.xlsx";
 
         //Списки управляющих программ Metrolog from HMI(Заполнить)
-        public List<String> Programms_Metro = new List<String> {};
-        public List<String> Programms_875 = new List<String> { "875.00w", "875.01w" };
+        public List<String> Programms_Metro = new List<String> {"7750.002s", "7750.001s", "7650.001s", "7770.001s", "7660.001s"};
+        public List<String> Programms_875 = new List<String> { "875.00seams", "875.01seams", "875.04seams" };
 
         //Путь к конфигу камеры
         public String CamConfigPath_875 = "config/acA2440-20gc.pfs";

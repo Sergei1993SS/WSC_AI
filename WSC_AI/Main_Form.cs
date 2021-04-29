@@ -156,6 +156,23 @@ namespace WSC_AI
 
                         Globals.CurrentCamConfig = cap.CamConfigPath_875;
                         cap.SetConfig(Globals.CurrentCamConfig);
+
+                        SummaryDefects();
+                        defects = new ConcurrentQueue<Defect>();
+
+                        if (defect_out.Count > 0)
+                        {
+                            Excel_UPLoad Exel = new Excel_UPLoad();
+                            Exel.WriteStat(defect_out);
+                            Exel = null;
+                            GC.Collect();
+                            GC.WaitForPendingFinalizers();
+                            GC.Collect();
+                            GC.WaitForPendingFinalizers();
+                        }
+
+
+
                     }
                     else if (OPC_client.Programms_Metro.Contains(DetalFromHMI))
                     {
@@ -166,22 +183,23 @@ namespace WSC_AI
 
                         Globals.CurrentCamConfig = cap.CamConfigPath_Metro;
                         cap.SetConfig(Globals.CurrentCamConfig);
+
+                        //SummaryDefects();
+                        defects = new ConcurrentQueue<Defect>();
+
+                        if (defect_out.Count > 0)
+                        {
+                            defect_out.Clear();
+                        }
+
                     }
-
-                    SummaryDefects();
-                    defects = new ConcurrentQueue<Defect>();
-
-                    if (defect_out.Count>0)
+                    else
                     {
-                        Excel_UPLoad Exel = new Excel_UPLoad();
-                        Exel.WriteStat(defect_out);
-                        Exel = null;
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
+                        defects = new ConcurrentQueue<Defect>();
+                        defect_out.Clear();
                     }
-                    defect_out.Clear();
+
+                   
                     AI.INDEX_DEFECT = 0;
                     TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
                     OPC_client.SetnisCameraVideoReadyFalse();
