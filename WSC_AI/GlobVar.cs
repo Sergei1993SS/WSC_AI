@@ -36,7 +36,7 @@ namespace WSC_AI
         public float threshold_defect = 0.6f;
 
         public Dictionary<int, String> DICTIONARY_DEFECTS = new Dictionary<int, string> {
-            { 0, "Шлаклаковые включения" },
+            { 0, "Шлаковые включения" },
             { 1, "Прожог или Поры или свищ" },
             { 2, "Брызги металла"},
             { 3, "Кратер или раковина"},
@@ -49,7 +49,7 @@ namespace WSC_AI
 
         //Списки управляющих программ Metrolog from HMI(Заполнить)
         public List<String> Programms_Metro = new List<String> {"7750.002s", "7750.001s", "7650.001s", "7770.001s", "7660.001s"};
-        public List<String> Programms_875 = new List<String> { "875.00seams", "875.01seams", "875.04seams" };
+        public List<String> Programms_875 = new List<String> { "875.00seams", "875.01seams", "875.04seams", "875.01w" };
 
         //Путь к конфигу камеры
         public String CamConfigPath_875 = "config/acA2440-20gc.pfs";

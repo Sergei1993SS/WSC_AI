@@ -5,6 +5,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.IO;
 using System.Drawing;
 using OpenCvSharp;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 
 namespace WSC_AI
@@ -19,25 +21,65 @@ namespace WSC_AI
 
         public Excel_UPLoad()
         {
+            start:
             LIST_DEFECTS = new List<String>(DICTIONARY_DEFECTS.Values);
             LIST_DEFECTS.Sort();
 
-            ex = new Excel.Application();
-            //Отобразить Excel
-            ex.Visible = false;
+            
+
 
             if (Directory.Exists(path_stat_defects))
             {
                 if (File.Exists(path_stat_defects + "\\" + NameExcelBook))
                 {
-                    Workbooks = ex.Workbooks;
-                    workBook = Workbooks.Open(path_stat_defects + "\\" + NameExcelBook,
-                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                    Type.Missing, Type.Missing);
-                    //Отключить отображение окон с сообщениями
-                    ex.DisplayAlerts = false;
+                    
+
+                    workBook = WBHelper.GetOpenedWB_ByPath(path_stat_defects + "\\" + NameExcelBook);
+                    
+
+
+                    if (workBook == null) //If null then Workbook is not already opened
+                    {
+                     ex = new Excel.Application();
+                        //Отобразить Excel
+                     ex.Visible = true;
+                        //ex.Interactive = false;
+                     ex.Workbooks.Application.DisplayAlerts = false;
+                     workBook = ex.Workbooks.Open(path_stat_defects + "\\" + NameExcelBook,
+                     Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                     Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                     Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                     Type.Missing, Type.Missing);
+                     
+                    }
+                    else
+                    {
+                       
+                        if (true)
+                        {
+                            try
+                            {
+                                workBook.Save();
+                            }
+                            catch (Exception ex)
+                            {
+
+                                LogWriter log = new LogWriter(ex.ToString());
+                                DialogResult res = MessageBox.Show(caption: "Ошибка зсписи Excel",
+                                text: "Данную книгу редоктируют, необходимо сохранить изменения и закрыть ее:" + System.Environment.NewLine + path_stat_defects + "\\" + NameExcelBook,
+                                buttons: MessageBoxButtons.OK, icon: MessageBoxIcon.Error, defaultButton: MessageBoxDefaultButton.Button3, options: MessageBoxOptions.ServiceNotification);
+                                goto start;
+                            }
+                            
+                        }
+                    }
+
+                    
+
+                    
+
+
+                    
                 }
 
                 else
@@ -166,6 +208,7 @@ namespace WSC_AI
                     ex.Application.ActiveWorkbook.SaveAs(path_stat_defects + "\\" + NameExcelBook, Type.Missing,
                     Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlNoChange,
                     Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+                    
 
 
 
@@ -181,6 +224,8 @@ namespace WSC_AI
 
             
         }
+
+
 
         private Dictionary<String, int> calculate_count(List<Defect> defect_out)
         {
@@ -209,7 +254,7 @@ namespace WSC_AI
             Dictionary<String, int> COUNT_DEFECTS = calculate_count(defect_out);
 
             //Получаем первый лист документа (счет начинается с 1)
-            sheet = (Excel.Worksheet)ex.Worksheets.get_Item(1);
+            sheet = (Excel.Worksheet)workBook.Sheets[1];
             Excel.Range last = sheet.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
 
             int row_start = last.Row;
@@ -258,15 +303,28 @@ namespace WSC_AI
             range1.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
 
 
+
+
+
+
+            workBook.Save();
+
+
+
+            /*var excelProcesses = Process.GetProcessesByName("excel");
+            string filename = NameExcelBook;
+
+            foreach (var process in excelProcesses)
+            {
+                if (process.MainWindowTitle == $"{filename} - Excel") // String.Format for pre-C# 6.0 
+                {
+                    process.Kill();
+                }
+            }*/
+
+           
             
 
-
-            ex.Application.ActiveWorkbook.SaveAs(path_stat_defects + "\\" + NameExcelBook, Type.Missing,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing, Excel.XlSaveAsAccessMode.xlNoChange,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-
-
-            workBook.Close();
             //Workbooks.Close();
             sheet = null;
             c1 = null;
@@ -275,7 +333,7 @@ namespace WSC_AI
             last = null;
             workBook = null;
             Workbooks = null;
-            ex.Quit();
+            
             ex = null;
 
             GC.Collect();

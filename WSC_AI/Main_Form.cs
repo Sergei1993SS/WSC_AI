@@ -185,7 +185,7 @@ namespace WSC_AI
                         Globals.CurrentCamConfig = cap.CamConfigPath_Metro;
                         cap.SetConfig(Globals.CurrentCamConfig);
 
-                        //SummaryDefects();
+                        SummaryDefects();
                         defects = new ConcurrentQueue<Defect>();
 
                         if (defect_out.Count > 0)
@@ -196,10 +196,12 @@ namespace WSC_AI
                     }
                     else
                     {
+                        SummaryDefects();
                         defects = new ConcurrentQueue<Defect>();
                         defect_out.Clear();
                     }
 
+                    SummaryDefects();
                     defect_out.Clear();
                     AI.INDEX_DEFECT = 0;
                     TIME_FOLDER = DateTime.Now.Hour.ToString() + "_" + DateTime.Now.Minute.ToString();
@@ -573,7 +575,7 @@ namespace WSC_AI
                             result.DefectCoordinates.Y,
                             result.DefectCoordinates.Z) < 25.0)
                         {
-
+                            
                             foreach (var item in result.Descriptions)
                             {
                                 if (!Main_Form.defect_out[Main_Form.defect_out.Count - 1].Descriptions.Contains(item))
@@ -736,7 +738,15 @@ namespace WSC_AI
 
         private void button1_Click(object sender, EventArgs e)
         {
-            OPC_client.SetnisCameraVideoReadyTrue();
+            DialogResult res = MessageBox.Show(caption: "Выгрузка статистики",
+                        text: "Уверены, что хотите выгрузить статистику?" + System.Environment.NewLine + "После подтверждения статистика будет выгружена и очищена!",
+                        buttons: MessageBoxButtons.YesNo, icon: MessageBoxIcon.Warning, defaultButton: MessageBoxDefaultButton.Button3, options: MessageBoxOptions.DefaultDesktopOnly);
+
+            if (res == DialogResult.Yes)
+            {
+                OPC_client.SetnisCameraVideoReadyTrue();
+            }
+            
         }
     }
 }
